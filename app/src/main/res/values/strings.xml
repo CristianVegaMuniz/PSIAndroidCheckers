@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Checkers</string>
+    <string name="BotonSiguiente">Intent</string>
+    <string name="tv1">GameActivity</string>
+</resources>

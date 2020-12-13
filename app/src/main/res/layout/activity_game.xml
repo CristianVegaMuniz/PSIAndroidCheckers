@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GameActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:elevation="25dp"
+        android:layout_width="411dp"
+        android:layout_height="413dp"
+        android:orientation="vertical"
+        android:padding="1dp"
+        tools:layout_editor_absoluteY="158dp"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/square_00"
+                android:layout_width="match_parent"
+                android:src="@drawable/whites"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"
+                tools:ignore="NestedWeights"
+                android:contentDescription="TODO" />
+
+            <ImageView
+                android:id="@+id/square_01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:contentDescription="TODO" />
+
+            <ImageView
+                android:id="@+id/square_02"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_03"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_04"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_05"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_06"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+
+                android:id="@+id/square_07"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+            <!-- Set image or background here --> />
+            <!-- Repeat the ImageView 7 times and change the id for every ImageView
+                 you create -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/square_10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_11"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_12"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_13"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_14"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_15"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_16"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_17"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+            <!-- Set image or background here --> />
+            <!-- Repeat the ImageView 7 times and change the id for every ImageView
+                 you create -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/square_20"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_21"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_22"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_23"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_24"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_25"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_26"
+                android:src="@drawable/whites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_27"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+            <!-- Set image or background here --> />
+            <!-- Repeat the ImageView 7 times and change the id for every ImageView
+                 you create -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/square_30"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_31"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_32"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_33"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_34"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_35"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_36"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_37"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+            <!-- Set image or background here --> />
+            <!-- Repeat the ImageView 7 times and change the id for every ImageView
+                 you create -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/square_40"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_41"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_42"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_43"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_44"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_45"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_46"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_47"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+            <!-- Set image or background here --> />
+            <!-- Repeat the ImageView 7 times and change the id for every ImageView
+                 you create -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/square_50"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_51"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_52"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_53"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_54"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_55"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_56"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_57"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+            <!-- Set image or background here --> />
+            <!-- Repeat the ImageView 7 times and change the id for every ImageView
+                 you create -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/square_60"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_61"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_62"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_63"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_64"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_65"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_66"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_67"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+            <!-- Set image or background here --> />
+            <!-- Repeat the ImageView 7 times and change the id for every ImageView
+                 you create -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/square_70"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_71"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_72"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_73"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_74"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_75"
+                android:src="@drawable/black"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+
+            <ImageView
+
+                android:id="@+id/square_76"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></ImageView>
+
+            <ImageView
+                android:id="@+id/square_77"
+                android:src="@drawable/black"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_weight="1"
+                android:background="@android:color/background_dark"
+                android:padding="1dp"></ImageView>
+            <!-- Set image or background here --> />
+            <!-- Repeat the ImageView 7 times and change the id for every ImageView
+                 you create -->
+        </LinearLayout>
+        <!-- Reapeat the LinearLayout 7 times too -->
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="261dp"
+        android:layout_height="48dp"
+        android:text="Player 1 Score:"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.187"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.509" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="221dp"
+        android:layout_height="43dp"
+        android:text="Player 2 Score:"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.169"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.533" />
+</androidx.constraintlayout.widget.ConstraintLayout>
