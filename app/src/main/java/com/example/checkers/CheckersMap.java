@@ -107,11 +107,12 @@ public class CheckersMap {
     boolean movePiece(Piece d, ImageView[][] images) {
         int x = d.getX();
         int y = d.getY();
-        int nx = d.getMovement().getGoX();
-        int ny = d.getMovement().getGoY();
 
 
         if (MoveChecker.checkMovement(d.getMovement(), map)) {
+            int nx = d.getMovement().getGoX();
+            int ny = d.getMovement().getGoY();
+
             System.out.println("\n-> Map will move a piece from: [" + x + "," + y + "] to: [" + nx + "," + ny + "]");
             map[x][y] = null;
             map[nx][ny] = d;

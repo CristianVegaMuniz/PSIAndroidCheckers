@@ -1835,7 +1835,7 @@ public class GameActivity extends AppCompatActivity {
         cell76.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
+                    System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
                     player.setSelectedPiece(checkersMap.getBlackPiece(7,6));
                     if (player.getSelectedPiece() != null) {
