@@ -2083,6 +2083,7 @@ public class GameActivity extends AppCompatActivity {
         imageViews[7][6] = cell76;
         cell77 = findViewById(R.id.square_77);
         imageViews[7][7] = cell77;
+        moveIA();
     }
 
 
