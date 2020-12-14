@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.*;
 
 public class GameActivity extends AppCompatActivity {
     private ImageView cell00, cell01, cell02, cell03, cell04, cell05, cell06, cell07;
@@ -40,10 +41,61 @@ public class GameActivity extends AppCompatActivity {
         System.out.println("*********************************\n");
         //m.showMap();
         System.out.println("\n       You are Player 1 (blacks)");
-
+        System.out.print("\n AQUI => " + checkersMap.getWhites());
         String s = "";
     }
 
+
+
+    private void moveIA() {
+        boolean moved = false;
+        LinkedList<Piece> movePieces = new LinkedList<Piece>();
+        LinkedList<Piece> iaPieces = checkersMap.getWhites();
+
+        Movement newMovement = null;
+        Movement este = null;
+        Piece p = null;
+        for (Piece piece : iaPieces) {
+            boolean hasMoves = piece.checkValidMoves(checkersMap.getMap());
+
+            if (hasMoves) {
+                movePieces.add(piece);
+
+                for (Movement movement : piece.getValidMoves()) {
+                    if (movement.isEatMovement()) {
+                        newMovement = movement;
+                        p = piece;
+                        p.setMovement(newMovement);
+                    }
+                }
+            }
+
+        }
+
+        if (movePieces.size() > 0) {
+
+            if (p == null) {
+                Random rand = new Random();
+                int upperbound = movePieces.size();
+                int random = rand.nextInt(upperbound);
+
+                p = movePieces.get(random);
+
+
+                Collections.sort(p.getValidMoves());
+
+                upperbound = p.getValidMoves().size();
+                random = rand.nextInt(upperbound);
+                este = p.getValidMoves().get(random);
+                imageViews[p.getX()][p.getY()].setImageDrawable(null);
+                imageViews[este.getGoX()][este.getGoY()].setImageDrawable(getResources().getDrawable(R.drawable.whites));
+                p.setMovement(este);
+            }
+            checkersMap.movePiece(p);
+        }
+    }
+
+  
     private void setClickListeners() {
         cell00.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +118,7 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
                     }
                     player.setSelectedPiece(null);
                 }
@@ -93,6 +146,7 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
                     }
                     player.setSelectedPiece(null);
                 }
@@ -120,6 +174,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -147,6 +203,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -174,6 +232,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -201,6 +261,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -228,8 +290,11 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
+
                 }
             }
         });
@@ -255,6 +320,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -282,6 +349,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -309,6 +378,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -336,6 +407,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -363,6 +436,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -390,6 +465,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -417,6 +494,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -444,6 +523,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -471,6 +552,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -498,6 +581,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -525,6 +610,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -552,7 +639,10 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
+
                     player.setSelectedPiece(null);
                 }
             }
@@ -579,6 +669,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -606,6 +698,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -633,6 +727,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -660,6 +756,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -687,6 +785,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -714,6 +814,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -741,6 +843,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -768,6 +872,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -795,6 +901,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -822,6 +930,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -849,6 +959,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -876,6 +988,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -903,6 +1017,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -930,6 +1046,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -957,6 +1075,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -984,6 +1104,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1011,6 +1133,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1038,6 +1162,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1065,6 +1191,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1092,6 +1220,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1119,6 +1249,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1146,6 +1278,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1173,6 +1307,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1200,6 +1336,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1227,6 +1365,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1254,6 +1394,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1281,6 +1423,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1308,6 +1452,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1335,6 +1481,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1362,6 +1510,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1389,6 +1539,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1416,6 +1568,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1443,6 +1597,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1470,6 +1626,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1497,6 +1655,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1524,6 +1684,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1551,6 +1713,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1578,6 +1742,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1605,6 +1771,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1632,6 +1800,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1659,6 +1829,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1686,6 +1858,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1713,6 +1887,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1740,6 +1916,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1767,6 +1945,8 @@ public class GameActivity extends AppCompatActivity {
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        moveIA();
+
                     }
                     player.setSelectedPiece(null);
                 }
