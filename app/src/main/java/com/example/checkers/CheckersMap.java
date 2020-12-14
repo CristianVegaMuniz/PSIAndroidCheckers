@@ -1,5 +1,7 @@
 package com.example.checkers;
 
+import android.widget.ImageView;
+
 import java.util.LinkedList;
 
 public class CheckersMap {
@@ -102,7 +104,7 @@ public class CheckersMap {
         }
     }
 
-    boolean movePiece(Piece d) {
+    boolean movePiece(Piece d, ImageView[][] images) {
         int x = d.getX();
         int y = d.getY();
         int nx = d.getMovement().getGoX();
@@ -122,6 +124,7 @@ public class CheckersMap {
             d.setY(ny);
 
             if(d.getMovement().isEatMovement()) {
+                images[d.getMovement().getEatedPiece().getX()][d.getMovement().getEatedPiece().getY()].setImageDrawable(null);
                 eatPiece(d.getMovement().getEatedPiece(), d);
             }
             return true;

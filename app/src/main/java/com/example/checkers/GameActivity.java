@@ -81,21 +81,20 @@ public class GameActivity extends AppCompatActivity {
 
                 p = movePieces.get(random);
 
-
                 Collections.sort(p.getValidMoves());
 
                 upperbound = p.getValidMoves().size();
                 random = rand.nextInt(upperbound);
-                este = p.getValidMoves().get(random);
-                imageViews[p.getX()][p.getY()].setImageDrawable(null);
-                imageViews[este.getGoX()][este.getGoY()].setImageDrawable(getResources().getDrawable(R.drawable.whites));
-                p.setMovement(este);
+                newMovement = p.getValidMoves().get(random);
+                p.setMovement(newMovement);
             }
-            checkersMap.movePiece(p);
+            imageViews[p.getX()][p.getY()].setImageDrawable(null);
+            imageViews[newMovement.getGoX()][newMovement.getGoY()].setImageDrawable(getResources().getDrawable(R.drawable.whites));
+            checkersMap.movePiece(p, imageViews);
         }
     }
 
-  
+
     private void setClickListeners() {
         cell00.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +111,7 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(0,0);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
@@ -140,7 +139,7 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(0,1);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
@@ -168,14 +167,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(0,2);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -197,14 +195,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(0,3);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -226,14 +223,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(0,4);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -255,14 +251,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(0,5);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -284,17 +279,15 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(0,6);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
-
                 }
             }
         });
@@ -314,14 +307,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(0,7);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -343,14 +335,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(1,0);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -372,14 +363,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(1,1);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -401,14 +391,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(1,2);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -430,14 +419,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(1,3);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -459,14 +447,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(1,4);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -488,14 +475,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(1,5);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -517,14 +503,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(1,6);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -546,14 +531,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(1,7);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -575,14 +559,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(2,0);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -604,14 +587,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(2,1);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -633,16 +615,14 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(2,2);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
-
                     player.setSelectedPiece(null);
                 }
             }
@@ -663,14 +643,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(2,3);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -692,14 +671,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(2,4);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -721,14 +699,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(2,5);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -750,14 +727,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(2,6);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -779,14 +755,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(2,7);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -808,14 +783,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(3,0);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -837,14 +811,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(3,1);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -866,14 +839,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(3,2);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -895,14 +867,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(3,3);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -924,14 +895,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(3,4);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -953,14 +923,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(3,5);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -982,14 +951,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(3,6);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1011,14 +979,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(3,7);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1040,14 +1007,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(4,0);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1069,14 +1035,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(4,1);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1098,14 +1063,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(4,2);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1127,14 +1091,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(4,3);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1156,14 +1119,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(4,4);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1185,14 +1147,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(4,5);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1214,14 +1175,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(4,6);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1243,14 +1203,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(4,7);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1272,14 +1231,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(5,0);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1301,14 +1259,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(5,1);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1330,14 +1287,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(5,2);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1359,14 +1315,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(5,3);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1388,14 +1343,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(5,4);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1417,14 +1371,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(5,5);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1446,14 +1399,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(5,6);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1475,14 +1427,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(5,7);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1504,14 +1455,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(6,0);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1533,14 +1483,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(6,1);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1562,14 +1511,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(6,2);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1591,14 +1539,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(6,3);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1620,14 +1567,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(6,4);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1649,14 +1595,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(6,5);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1678,14 +1623,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(6,6);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1707,14 +1651,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(6,7);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1736,14 +1679,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(7,0);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1765,14 +1707,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(7,1);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1794,14 +1735,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(7,2);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1823,14 +1763,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(7,3);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1852,14 +1791,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(7,4);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1881,14 +1819,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(7,5);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1910,14 +1847,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(7,6);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
@@ -1939,14 +1875,13 @@ public class GameActivity extends AppCompatActivity {
                     int y = selected.getY();
                     imageViews[x][y].setBackgroundColor(getColor(R.color.black));
                     selected.move(7,7);
-                    boolean moved = checkersMap.movePiece(selected);
+                    boolean moved = checkersMap.movePiece(selected, imageViews);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
                         imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
                         moveIA();
-
                     }
                     player.setSelectedPiece(null);
                 }
