@@ -335,6 +335,7 @@ public class MoveChecker {
                     break;
             }
         }
+        /*
         if (list.size() > 0) {
             System.out.println("Checked valid moves. Nº of valid movements: " + list.size());
             for(Movement movenent : list) {
@@ -348,6 +349,8 @@ public class MoveChecker {
                 }
             }
         }
+        */
+
         return list;
     }
 

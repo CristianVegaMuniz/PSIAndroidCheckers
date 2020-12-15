@@ -2,12 +2,12 @@ package com.example.checkers;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public class GameActivity extends AppCompatActivity {
@@ -19,8 +19,22 @@ public class GameActivity extends AppCompatActivity {
     private ImageView cell50, cell51, cell52, cell53, cell54, cell55, cell56, cell57;
     private ImageView cell60, cell61, cell62, cell63, cell64, cell65, cell66, cell67;
     private ImageView cell70, cell71, cell72, cell73, cell74, cell75, cell76, cell77;
-
     private ImageView[][] imageViews = new ImageView[8][8];
+
+    private TextView scorePlayer, scoreIa;
+
+    private Drawable blackPieceImg;
+    private Drawable whitePieceImg;
+
+    private Drawable playerDrawable;
+    private Drawable iaDrawable;
+
+    private int green;
+    private int black;
+
+    public ImageView[][] getImageViews() {
+        return imageViews;
+    }
 
     private CheckersMap checkersMap = new CheckersMap();
     private Player player = new Player();
@@ -29,32 +43,23 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
         init();
         setClickListeners();
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        //Map m = new Map();
-        checkersMap.showMap();
-        boolean fin = false;
         System.out.println("\n**********************************");
         System.out.println("         Starting match!");
         System.out.println("*********************************\n");
-        //m.showMap();
-        System.out.println("\n       You are Player 1 (blacks)");
-        System.out.print("\n AQUI => " + checkersMap.getWhites());
-        String s = "";
+        checkersMap.showMap();
     }
 
-
-
     private void moveIA() {
-        boolean moved = false;
         LinkedList<Piece> movePieces = new LinkedList<Piece>();
-        LinkedList<Piece> iaPieces = checkersMap.getWhites();
+        LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
 
         Movement newMovement = null;
-        Movement este = null;
         Piece p = null;
+
         for (Piece piece : iaPieces) {
             boolean hasMoves = piece.checkValidMoves(checkersMap.getMap());
 
@@ -89,34 +94,32 @@ public class GameActivity extends AppCompatActivity {
                 p.setMovement(newMovement);
             }
             imageViews[p.getX()][p.getY()].setImageDrawable(null);
-            imageViews[newMovement.getGoX()][newMovement.getGoY()].setImageDrawable(getResources().getDrawable(R.drawable.whites));
-            checkersMap.movePiece(p, imageViews);
+            imageViews[newMovement.getGoX()][newMovement.getGoY()].setImageDrawable(iaDrawable);
+            checkersMap.movePiece(p, imageViews, scorePlayer, scoreIa);
         }
     }
-
 
     private void setClickListeners() {
         cell00.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(0,0));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,0));
                     if (player.getSelectedPiece() != null) {
-                        cell00.setBackgroundColor(getColor(R.color.green));
+                        cell00.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(0,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -127,24 +130,23 @@ public class GameActivity extends AppCompatActivity {
         cell01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(0,1));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,1));
                     if (player.getSelectedPiece() != null) {
-                        cell01.setBackgroundColor(getColor(R.color.green));
+                        cell01.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(0,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -155,24 +157,23 @@ public class GameActivity extends AppCompatActivity {
         cell02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(0,2));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,2));
                     if (player.getSelectedPiece() != null) {
-                        cell02.setBackgroundColor(getColor(R.color.green));
+                        cell02.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(0,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -183,24 +184,23 @@ public class GameActivity extends AppCompatActivity {
         cell03.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(0,3));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,3));
                     if (player.getSelectedPiece() != null) {
-                        cell03.setBackgroundColor(getColor(R.color.green));
+                        cell03.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(0,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -211,24 +211,23 @@ public class GameActivity extends AppCompatActivity {
         cell04.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(0,4));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,4));
                     if (player.getSelectedPiece() != null) {
-                        cell04.setBackgroundColor(getColor(R.color.green));
+                        cell04.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(0,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -239,24 +238,23 @@ public class GameActivity extends AppCompatActivity {
         cell05.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(0,5));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,5));
                     if (player.getSelectedPiece() != null) {
-                        cell05.setBackgroundColor(getColor(R.color.green));
+                        cell05.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(0,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -267,24 +265,23 @@ public class GameActivity extends AppCompatActivity {
         cell06.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(0,6));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,6));
                     if (player.getSelectedPiece() != null) {
-                        cell06.setBackgroundColor(getColor(R.color.green));
+                        cell06.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(0,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -295,24 +292,23 @@ public class GameActivity extends AppCompatActivity {
         cell07.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(0,7));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,7));
                     if (player.getSelectedPiece() != null) {
-                        cell07.setBackgroundColor(getColor(R.color.green));
+                        cell07.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(0,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -323,24 +319,23 @@ public class GameActivity extends AppCompatActivity {
         cell10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(1,0));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,0));
                     if (player.getSelectedPiece() != null) {
-                        cell10.setBackgroundColor(getColor(R.color.green));
+                        cell10.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(1,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -351,24 +346,23 @@ public class GameActivity extends AppCompatActivity {
         cell11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(1,1));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,1));
                     if (player.getSelectedPiece() != null) {
-                        cell11.setBackgroundColor(getColor(R.color.green));
+                        cell11.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(1,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -379,24 +373,23 @@ public class GameActivity extends AppCompatActivity {
         cell12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(1,2));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,2));
                     if (player.getSelectedPiece() != null) {
-                        cell12.setBackgroundColor(getColor(R.color.green));
+                        cell12.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(1,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -407,24 +400,23 @@ public class GameActivity extends AppCompatActivity {
         cell13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(1,3));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,3));
                     if (player.getSelectedPiece() != null) {
-                        cell13.setBackgroundColor(getColor(R.color.green));
+                        cell13.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(1,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -435,24 +427,23 @@ public class GameActivity extends AppCompatActivity {
         cell14.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(1,4));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,4));
                     if (player.getSelectedPiece() != null) {
-                        cell14.setBackgroundColor(getColor(R.color.green));
+                        cell14.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(1,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -463,24 +454,23 @@ public class GameActivity extends AppCompatActivity {
         cell15.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(1,5));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,5));
                     if (player.getSelectedPiece() != null) {
-                        cell15.setBackgroundColor(getColor(R.color.green));
+                        cell15.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(1,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -491,24 +481,23 @@ public class GameActivity extends AppCompatActivity {
         cell16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(1,6));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,6));
                     if (player.getSelectedPiece() != null) {
-                        cell16.setBackgroundColor(getColor(R.color.green));
+                        cell16.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(1,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -519,24 +508,23 @@ public class GameActivity extends AppCompatActivity {
         cell17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(1,7));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,7));
                     if (player.getSelectedPiece() != null) {
-                        cell17.setBackgroundColor(getColor(R.color.green));
+                        cell17.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(1,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -547,24 +535,23 @@ public class GameActivity extends AppCompatActivity {
         cell20.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(2,0));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,0));
                     if (player.getSelectedPiece() != null) {
-                        cell20.setBackgroundColor(getColor(R.color.green));
+                        cell20.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(2,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -575,24 +562,23 @@ public class GameActivity extends AppCompatActivity {
         cell21.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(2,1));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,1));
                     if (player.getSelectedPiece() != null) {
-                        cell21.setBackgroundColor(getColor(R.color.green));
+                        cell21.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(2,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -603,24 +589,23 @@ public class GameActivity extends AppCompatActivity {
         cell22.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(2,2));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,2));
                     if (player.getSelectedPiece() != null) {
-                        cell22.setBackgroundColor(getColor(R.color.green));
+                        cell22.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(2,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -631,24 +616,23 @@ public class GameActivity extends AppCompatActivity {
         cell23.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(2,3));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,3));
                     if (player.getSelectedPiece() != null) {
-                        cell23.setBackgroundColor(getColor(R.color.green));
+                        cell23.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(2,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -659,24 +643,23 @@ public class GameActivity extends AppCompatActivity {
         cell24.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(2,4));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,4));
                     if (player.getSelectedPiece() != null) {
-                        cell24.setBackgroundColor(getColor(R.color.green));
+                        cell24.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(2,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -687,24 +670,23 @@ public class GameActivity extends AppCompatActivity {
         cell25.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(2,5));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,5));
                     if (player.getSelectedPiece() != null) {
-                        cell25.setBackgroundColor(getColor(R.color.green));
+                        cell25.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(2,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -715,24 +697,23 @@ public class GameActivity extends AppCompatActivity {
         cell26.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(2,6));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,6));
                     if (player.getSelectedPiece() != null) {
-                        cell26.setBackgroundColor(getColor(R.color.green));
+                        cell26.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(2,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -743,24 +724,23 @@ public class GameActivity extends AppCompatActivity {
         cell27.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(2,7));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,7));
                     if (player.getSelectedPiece() != null) {
-                        cell27.setBackgroundColor(getColor(R.color.green));
+                        cell27.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(2,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -771,24 +751,23 @@ public class GameActivity extends AppCompatActivity {
         cell30.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(3,0));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,0));
                     if (player.getSelectedPiece() != null) {
-                        cell30.setBackgroundColor(getColor(R.color.green));
+                        cell30.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(3,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -799,24 +778,23 @@ public class GameActivity extends AppCompatActivity {
         cell31.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(3,1));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,1));
                     if (player.getSelectedPiece() != null) {
-                        cell31.setBackgroundColor(getColor(R.color.green));
+                        cell31.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(3,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -827,24 +805,23 @@ public class GameActivity extends AppCompatActivity {
         cell32.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(3,2));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,2));
                     if (player.getSelectedPiece() != null) {
-                        cell32.setBackgroundColor(getColor(R.color.green));
+                        cell32.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(3,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -855,24 +832,23 @@ public class GameActivity extends AppCompatActivity {
         cell33.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(3,3));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,3));
                     if (player.getSelectedPiece() != null) {
-                        cell33.setBackgroundColor(getColor(R.color.green));
+                        cell33.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(3,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -883,24 +859,23 @@ public class GameActivity extends AppCompatActivity {
         cell34.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(3,4));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,4));
                     if (player.getSelectedPiece() != null) {
-                        cell34.setBackgroundColor(getColor(R.color.green));
+                        cell34.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(3,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -911,24 +886,23 @@ public class GameActivity extends AppCompatActivity {
         cell35.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(3,5));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,5));
                     if (player.getSelectedPiece() != null) {
-                        cell35.setBackgroundColor(getColor(R.color.green));
+                        cell35.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(3,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -939,24 +913,23 @@ public class GameActivity extends AppCompatActivity {
         cell36.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(3,6));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,6));
                     if (player.getSelectedPiece() != null) {
-                        cell36.setBackgroundColor(getColor(R.color.green));
+                        cell36.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(3,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -967,24 +940,23 @@ public class GameActivity extends AppCompatActivity {
         cell37.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(3,7));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,7));
                     if (player.getSelectedPiece() != null) {
-                        cell37.setBackgroundColor(getColor(R.color.green));
+                        cell37.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(3,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -995,24 +967,23 @@ public class GameActivity extends AppCompatActivity {
         cell40.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(4,0));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,0));
                     if (player.getSelectedPiece() != null) {
-                        cell40.setBackgroundColor(getColor(R.color.green));
+                        cell40.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(4,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1023,24 +994,23 @@ public class GameActivity extends AppCompatActivity {
         cell41.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(4,1));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,1));
                     if (player.getSelectedPiece() != null) {
-                        cell41.setBackgroundColor(getColor(R.color.green));
+                        cell41.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(4,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1051,24 +1021,23 @@ public class GameActivity extends AppCompatActivity {
         cell42.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(4,2));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,2));
                     if (player.getSelectedPiece() != null) {
-                        cell42.setBackgroundColor(getColor(R.color.green));
+                        cell42.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(4,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1079,24 +1048,23 @@ public class GameActivity extends AppCompatActivity {
         cell43.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(4,3));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,3));
                     if (player.getSelectedPiece() != null) {
-                        cell43.setBackgroundColor(getColor(R.color.green));
+                        cell43.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(4,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1107,24 +1075,23 @@ public class GameActivity extends AppCompatActivity {
         cell44.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(4,4));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,4));
                     if (player.getSelectedPiece() != null) {
-                        cell44.setBackgroundColor(getColor(R.color.green));
+                        cell44.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(4,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1135,24 +1102,23 @@ public class GameActivity extends AppCompatActivity {
         cell45.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(4,5));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,5));
                     if (player.getSelectedPiece() != null) {
-                        cell45.setBackgroundColor(getColor(R.color.green));
+                        cell45.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(4,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1163,24 +1129,23 @@ public class GameActivity extends AppCompatActivity {
         cell46.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(4,6));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,6));
                     if (player.getSelectedPiece() != null) {
-                        cell46.setBackgroundColor(getColor(R.color.green));
+                        cell46.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(4,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1191,24 +1156,23 @@ public class GameActivity extends AppCompatActivity {
         cell47.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(4,7));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,7));
                     if (player.getSelectedPiece() != null) {
-                        cell47.setBackgroundColor(getColor(R.color.green));
+                        cell47.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(4,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1219,24 +1183,23 @@ public class GameActivity extends AppCompatActivity {
         cell50.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(5,0));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,0));
                     if (player.getSelectedPiece() != null) {
-                        cell50.setBackgroundColor(getColor(R.color.green));
+                        cell50.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(5,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1247,24 +1210,23 @@ public class GameActivity extends AppCompatActivity {
         cell51.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(5,1));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,1));
                     if (player.getSelectedPiece() != null) {
-                        cell51.setBackgroundColor(getColor(R.color.green));
+                        cell51.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(5,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1275,24 +1237,23 @@ public class GameActivity extends AppCompatActivity {
         cell52.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(5,2));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,2));
                     if (player.getSelectedPiece() != null) {
-                        cell52.setBackgroundColor(getColor(R.color.green));
+                        cell52.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(5,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1303,24 +1264,23 @@ public class GameActivity extends AppCompatActivity {
         cell53.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(5,3));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,3));
                     if (player.getSelectedPiece() != null) {
-                        cell53.setBackgroundColor(getColor(R.color.green));
+                        cell53.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(5,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1331,24 +1291,23 @@ public class GameActivity extends AppCompatActivity {
         cell54.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(5,4));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,4));
                     if (player.getSelectedPiece() != null) {
-                        cell54.setBackgroundColor(getColor(R.color.green));
+                        cell54.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(5,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1359,24 +1318,23 @@ public class GameActivity extends AppCompatActivity {
         cell55.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(5,5));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,5));
                     if (player.getSelectedPiece() != null) {
-                        cell55.setBackgroundColor(getColor(R.color.green));
+                        cell55.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(5,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1387,24 +1345,23 @@ public class GameActivity extends AppCompatActivity {
         cell56.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(5,6));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,6));
                     if (player.getSelectedPiece() != null) {
-                        cell56.setBackgroundColor(getColor(R.color.green));
+                        cell56.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(5,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1415,24 +1372,23 @@ public class GameActivity extends AppCompatActivity {
         cell57.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(5,7));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,7));
                     if (player.getSelectedPiece() != null) {
-                        cell57.setBackgroundColor(getColor(R.color.green));
+                        cell57.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(5,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1443,24 +1399,23 @@ public class GameActivity extends AppCompatActivity {
         cell60.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(6,0));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,0));
                     if (player.getSelectedPiece() != null) {
-                        cell60.setBackgroundColor(getColor(R.color.green));
+                        cell60.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(6,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1471,24 +1426,23 @@ public class GameActivity extends AppCompatActivity {
         cell61.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(6,1));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,1));
                     if (player.getSelectedPiece() != null) {
-                        cell61.setBackgroundColor(getColor(R.color.green));
+                        cell61.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(6,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1499,24 +1453,23 @@ public class GameActivity extends AppCompatActivity {
         cell62.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(6,2));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,2));
                     if (player.getSelectedPiece() != null) {
-                        cell62.setBackgroundColor(getColor(R.color.green));
+                        cell62.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(6,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1527,24 +1480,23 @@ public class GameActivity extends AppCompatActivity {
         cell63.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(6,3));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,3));
                     if (player.getSelectedPiece() != null) {
-                        cell63.setBackgroundColor(getColor(R.color.green));
+                        cell63.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(6,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1555,24 +1507,23 @@ public class GameActivity extends AppCompatActivity {
         cell64.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(6,4));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,4));
                     if (player.getSelectedPiece() != null) {
-                        cell64.setBackgroundColor(getColor(R.color.green));
+                        cell64.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(6,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1583,24 +1534,23 @@ public class GameActivity extends AppCompatActivity {
         cell65.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(6,5));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,5));
                     if (player.getSelectedPiece() != null) {
-                        cell65.setBackgroundColor(getColor(R.color.green));
+                        cell65.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(6,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1611,24 +1561,23 @@ public class GameActivity extends AppCompatActivity {
         cell66.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(6,6));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,6));
                     if (player.getSelectedPiece() != null) {
-                        cell66.setBackgroundColor(getColor(R.color.green));
+                        cell66.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(6,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1639,24 +1588,23 @@ public class GameActivity extends AppCompatActivity {
         cell67.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(6,7));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,7));
                     if (player.getSelectedPiece() != null) {
-                        cell67.setBackgroundColor(getColor(R.color.green));
+                        cell67.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(6,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1667,24 +1615,23 @@ public class GameActivity extends AppCompatActivity {
         cell70.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(7,0));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,0));
                     if (player.getSelectedPiece() != null) {
-                        cell70.setBackgroundColor(getColor(R.color.green));
+                        cell70.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(7,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1695,24 +1642,23 @@ public class GameActivity extends AppCompatActivity {
         cell71.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(7,1));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,1));
                     if (player.getSelectedPiece() != null) {
-                        cell71.setBackgroundColor(getColor(R.color.green));
+                        cell71.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(7,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1723,24 +1669,23 @@ public class GameActivity extends AppCompatActivity {
         cell72.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(7,2));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,2));
                     if (player.getSelectedPiece() != null) {
-                        cell72.setBackgroundColor(getColor(R.color.green));
+                        cell72.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(7,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1751,24 +1696,23 @@ public class GameActivity extends AppCompatActivity {
         cell73.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(7,3));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,3));
                     if (player.getSelectedPiece() != null) {
-                        cell73.setBackgroundColor(getColor(R.color.green));
+                        cell73.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(7,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1779,24 +1723,23 @@ public class GameActivity extends AppCompatActivity {
         cell74.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(7,4));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,4));
                     if (player.getSelectedPiece() != null) {
-                        cell74.setBackgroundColor(getColor(R.color.green));
+                        cell74.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(7,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1807,24 +1750,23 @@ public class GameActivity extends AppCompatActivity {
         cell75.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(7,5));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,5));
                     if (player.getSelectedPiece() != null) {
-                        cell75.setBackgroundColor(getColor(R.color.green));
+                        cell75.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(7,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1835,24 +1777,23 @@ public class GameActivity extends AppCompatActivity {
         cell76.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(7,6));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,6));
                     if (player.getSelectedPiece() != null) {
-                        cell76.setBackgroundColor(getColor(R.color.green));
+                        cell76.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(7,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1863,24 +1804,23 @@ public class GameActivity extends AppCompatActivity {
         cell77.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED! Piece: " + player.getSelectedPiece());
                 if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getBlackPiece(7,7));
+                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,7));
                     if (player.getSelectedPiece() != null) {
-                        cell77.setBackgroundColor(getColor(R.color.green));
+                        cell77.setBackgroundColor(green);
                     }
                 } else {
                     Piece selected = player.getSelectedPiece();
                     int x = selected.getX();
                     int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(getColor(R.color.black));
+                    imageViews[x][y].setBackgroundColor(black);
                     selected.move(7,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews);
+                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
                     if (moved) {
                         imageViews[x][y].setImageDrawable(null);
                         x = selected.getX();
                         y = selected.getY();
-                        imageViews[x][y].setImageDrawable(getResources().getDrawable(R.drawable.black));
+                        imageViews[x][y].setImageDrawable(playerDrawable);
                         moveIA();
                     }
                     player.setSelectedPiece(null);
@@ -1890,6 +1830,18 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void init() {
+        blackPieceImg = getResources().getDrawable(R.drawable.black);
+        whitePieceImg = getResources().getDrawable(R.drawable.whites);
+
+        iaDrawable = whitePieceImg;
+        playerDrawable = blackPieceImg;
+
+        green = getResources().getColor(R.color.green);
+        black = getResources().getColor(R.color.black);
+
+        scorePlayer = findViewById(R.id.scoreIA);
+        scoreIa = findViewById(R.id.scorePlayer);
+
         cell00 = findViewById(R.id.square_00);
         imageViews[0][0] = cell00;
         cell01 = findViewById(R.id.square_01);

@@ -2,4 +2,6 @@
     <string name="app_name">Checkers</string>
     <string name="BotonSiguiente">Intent</string>
     <string name="tv1">GameActivity</string>
+    <string name="player_score">Player Score: 0</string>
+    <string name="ia_score">IA Score: 0</string>
 </resources>

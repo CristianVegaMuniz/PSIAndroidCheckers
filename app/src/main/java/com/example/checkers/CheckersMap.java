@@ -1,57 +1,59 @@
 package com.example.checkers;
 
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.LinkedList;
 
 public class CheckersMap {
-    private LinkedList<Piece> blacks = new LinkedList<Piece>();
-    private LinkedList<Piece> whites = new LinkedList<Piece>();
-    private int scorePlayer1 = 0;
-    private int scorePlayer2 = 0;
+    private LinkedList<Piece> playerPieces = new LinkedList<Piece>();
+    private LinkedList<Piece> iaPieces = new LinkedList<Piece>();
+    private int scorePlayer = 0;
+    private int scoreIA = 0;
     private Piece[][] map = new Piece[8][8];
-    // 1 = negras, 2 = blancasIA
 
     public CheckersMap() {
         setStartPosition();
     }
 
-    public CheckersMap(CheckersMap m) {
-        this.blacks = new LinkedList<Piece>(m.getBlacks());
-        this.whites = new LinkedList<Piece>(m.getWhites());
-        this.scorePlayer1 = m.getScorePlayer1();
-        this.scorePlayer2 = m.getScorePlayer2();
+    public CheckersMap(CheckersMap checkersMap) {
+        this.playerPieces = new LinkedList<Piece>(checkersMap.getPlayerPieces());
+        this.iaPieces = new LinkedList<Piece>(checkersMap.getIaPieces());
+        this.scorePlayer = checkersMap.getScorePlayer();
+        this.scoreIA = checkersMap.getScoreIA();
 
         for (int  i = 0; i < 8; i++) {
             for(int j = 0; j < 8 ; j++) {
-                if (m.getMap()[i][j] != null) {
-                    this.map[i][j] = new Piece(m.getMap()[i][j]);
+                if (checkersMap.getMap()[i][j] != null) {
+                    this.map[i][j] = new Piece(checkersMap.getMap()[i][j]);
                 }
             }
         }
     }
 
     void showMap() {
+        String msg = "";
         for (int i = 0; i < map.length; i++) {
-            System.out.print(i + "->");
+            msg += i + "->";
             for (int j = 0; j < map.length; j++) {
                 if (map[i][j] != null) {
-                    System.out.print("|"+map[i][j].getType());
+                    msg += "|"+map[i][j].getType();
                 } else {
-                    System.out.print("| ");
+                    msg += "| ";
                 }
             }
-            System.out.println("|");
+            msg += "|\n";
         }
 
-        System.out.println("    0 1 2 3 4 5 6 7\n");
-        System.out.println("Score Player 1: " + scorePlayer1);
-        System.out.println("Score Player 2: " + scorePlayer2);
+        msg += "    0 1 2 3 4 5 6 7\n";
+        msg += "Player Score: " + scorePlayer + "\n";
+        msg += "IA Score: " + scoreIA + "\n";
+
+        System.out.println(msg);
     }
 
-    Piece getBlackPiece(int x, int y) {
+    Piece getPlayerPiece(int x, int y) {
         Piece d = map[x][y];
-        System.out.println(x + "-" + y + ". Piece: " + d);
 
         if (d != null) {
             if (d.getType() == 2) {
@@ -61,7 +63,7 @@ public class CheckersMap {
         return d;
     }
 
-    Piece getWhitePiece(int x, int y) {
+    Piece getIaPiece(int x, int y) {
         Piece d = map[x][y];
         if (d != null) {
             if (d.getType() == 1) {
@@ -71,23 +73,23 @@ public class CheckersMap {
         return d;
     }
 
-    public int getScorePlayer1() {
-        return scorePlayer1;
+    public int getScorePlayer() {
+        return scorePlayer;
     }
 
-    public void setScorePlayer1(int scorePlayer1) {
-        this.scorePlayer1 = scorePlayer1;
+    public void setScorePlayer(int scorePlayer) {
+        this.scorePlayer = scorePlayer;
     }
 
-    public int getScorePlayer2() {
-        return scorePlayer2;
+    public int getScoreIA() {
+        return scoreIA;
     }
 
-    public void setScorePlayer2(int scorePlayer2) {
-        this.scorePlayer2 = scorePlayer2;
+    public void setScoreIA(int scoreIA) {
+        this.scoreIA = scoreIA;
     }
 
-    void eatPiece(Piece eaten, Piece eater) {
+    void eatPiece(Piece eaten, Piece eater, TextView tvScoreIa, TextView tvScorePlayer) {
         for (int i = 0; i < map[0].length; i++)
             for (int j= 0; j < map[1].length; j++)
                 if(map[i][j] == eaten) {
@@ -96,24 +98,33 @@ public class CheckersMap {
 
 
         if (eater.getType() == 1) {
-            scorePlayer1++;
-            whites.remove(eaten);
+            scorePlayer++;
+            tvScorePlayer.setText("Player Score: " + scorePlayer);
+            iaPieces.remove(eaten);
         } else {
-            scorePlayer2++;
-            blacks.remove(eaten);
+            scoreIA++;
+            tvScoreIa.setText("IA Score: " + scoreIA);
+            playerPieces.remove(eaten);
         }
     }
 
-    boolean movePiece(Piece d, ImageView[][] images) {
+    boolean movePiece(Piece d, ImageView[][] images, TextView tvScoreIa, TextView tvScorePlayer) {
         int x = d.getX();
         int y = d.getY();
-
 
         if (MoveChecker.checkMovement(d.getMovement(), map)) {
             int nx = d.getMovement().getGoX();
             int ny = d.getMovement().getGoY();
 
-            System.out.println("\n-> Map will move a piece from: [" + x + "," + y + "] to: [" + nx + "," + ny + "]");
+            String msg = "";
+
+            if (d.getType() == 1) {
+                msg = "\n-> Map will move a playerPiece from [" + x + "," + y + "] to [" + nx + "," + ny + "]";
+            } else {
+                msg = "\n-> Map will move a iaPiece from [" + x + "," + y + "] to [" + nx + "," + ny + "]";
+            }
+
+            System.out.println(msg);
             map[x][y] = null;
             map[nx][ny] = d;
 
@@ -126,7 +137,7 @@ public class CheckersMap {
 
             if(d.getMovement().isEatMovement()) {
                 images[d.getMovement().getEatedPiece().getX()][d.getMovement().getEatedPiece().getY()].setImageDrawable(null);
-                eatPiece(d.getMovement().getEatedPiece(), d);
+                eatPiece(d.getMovement().getEatedPiece(), d, tvScoreIa, tvScorePlayer);
             }
             return true;
         } else {
@@ -142,7 +153,7 @@ public class CheckersMap {
                 Piece d = new Piece(0, i);
                 map[0][i] = d;
                 d.setType(2);
-                whites.addLast(d);
+                iaPieces.addLast(d);
             }
 
         }
@@ -152,7 +163,7 @@ public class CheckersMap {
                 Piece d = new Piece(1, i);
                 map[1][i] = d;
                 d.setType(2);
-                whites.addLast(d);
+                iaPieces.addLast(d);
 
             }
         }
@@ -162,7 +173,7 @@ public class CheckersMap {
                 Piece d = new Piece(2, i);
                 map[2][i] = d;
                 d.setType(2);
-                whites.addLast(d);
+                iaPieces.addLast(d);
 
 
             }
@@ -174,7 +185,7 @@ public class CheckersMap {
                 Piece d = new Piece(5, i);
                 map[5][i] = d;
                 d.setType(1);
-                blacks.addLast(d);
+                playerPieces.addLast(d);
 
             }
         }
@@ -184,7 +195,7 @@ public class CheckersMap {
                 Piece d = new Piece(6, i);
                 map[6][i] = d;
                 d.setType(1);
-                blacks.addLast(d);
+                playerPieces.addLast(d);
             }
         }
 
@@ -193,25 +204,25 @@ public class CheckersMap {
                 Piece d = new Piece(7, i);
                 map[7][i] = d;
                 d.setType(1);
-                blacks.addLast(d);
+                playerPieces.addLast(d);
             }
         }
     }
 
-    public LinkedList<Piece> getBlacks() {
-        return blacks;
+    public LinkedList<Piece> getPlayerPieces() {
+        return playerPieces;
     }
 
-    public void setBlacks(LinkedList<Piece> blacks) {
-        this.blacks = blacks;
+    public void setPlayerPieces(LinkedList<Piece> blacks) {
+        this.playerPieces = blacks;
     }
 
-    public LinkedList<Piece> getWhites() {
-        return whites;
+    public LinkedList<Piece> getIaPieces() {
+        return iaPieces;
     }
 
-    public void setWhites(LinkedList<Piece> whites) {
-        this.whites = whites;
+    public void setIaPieces(LinkedList<Piece> whites) {
+        this.iaPieces = whites;
     }
 
     public Piece[][] getMap() {
