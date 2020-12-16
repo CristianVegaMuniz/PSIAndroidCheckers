@@ -12,6 +12,13 @@ public class CheckersMap {
     private int scoreIA = 0;
     private Piece[][] map = new Piece[8][8];
 
+    private TextView logs = null;
+    private String logMsg = "";
+
+    public void setLogs(TextView logs) {
+        this.logs = logs;
+    }
+
     public CheckersMap() {
         setStartPosition();
     }
@@ -96,16 +103,20 @@ public class CheckersMap {
                     map[i][j] = null;
                 }
 
-
         if (eater.getType() == 1) {
+            System.out.println("\tThe Player eated an IAPiece on ["+ eaten.getX() + "," + eaten.getY() + "]");
+            logMsg += "\n\n EAT -> The Player eated an IAPiece on ["+ eaten.getX() + "," + eaten.getY() + "]\n";
             scorePlayer++;
             tvScorePlayer.setText("Player Score: " + scorePlayer);
             iaPieces.remove(eaten);
         } else {
+            System.out.println("\tThe IA eated a PlayerPiece on ["+ eaten.getX() + "," + eaten.getY() + "]");
+            logMsg += "\n\n EAT -> The IA eated a PlayerPiece on ["+ eaten.getX() + "," + eaten.getY() + "]\n";
             scoreIA++;
             tvScoreIa.setText("IA Score: " + scoreIA);
             playerPieces.remove(eaten);
         }
+        logs.setText(logMsg);
     }
 
     boolean movePiece(Piece d, ImageView[][] images, TextView tvScoreIa, TextView tvScorePlayer) {
@@ -119,12 +130,14 @@ public class CheckersMap {
             String msg = "";
 
             if (d.getType() == 1) {
-                msg = "\n-> Map will move a playerPiece from [" + x + "," + y + "] to [" + nx + "," + ny + "]";
+                msg = "\n  -> Map will move a playerPiece from [" + x + "," + y + "] to [" + nx + "," + ny + "]";
             } else {
-                msg = "\n-> Map will move a iaPiece from [" + x + "," + y + "] to [" + nx + "," + ny + "]";
+                msg = "\n  -> Map will move a iaPiece from [" + x + "," + y + "] to [" + nx + "," + ny + "]";
             }
 
             System.out.println(msg);
+            logMsg += msg;
+            logs.setText(logMsg);
             map[x][y] = null;
             map[nx][ny] = d;
 
@@ -138,6 +151,11 @@ public class CheckersMap {
             if(d.getMovement().isEatMovement()) {
                 images[d.getMovement().getEatedPiece().getX()][d.getMovement().getEatedPiece().getY()].setImageDrawable(null);
                 eatPiece(d.getMovement().getEatedPiece(), d, tvScoreIa, tvScorePlayer);
+            }
+            try {
+                wait(1000000000);
+            }catch (Exception e) {
+
             }
             return true;
         } else {

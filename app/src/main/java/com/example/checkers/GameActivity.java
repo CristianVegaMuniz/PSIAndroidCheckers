@@ -21,7 +21,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView cell70, cell71, cell72, cell73, cell74, cell75, cell76, cell77;
     private ImageView[][] imageViews = new ImageView[8][8];
 
-    private TextView scorePlayer, scoreIa;
+    private TextView scorePlayer, scoreIa, logs;
 
     private Drawable blackPieceImg;
     private Drawable whitePieceImg;
@@ -61,17 +61,12 @@ public class GameActivity extends AppCompatActivity {
         Piece p = null;
 
         for (Piece piece : iaPieces) {
-            boolean hasMoves = piece.checkValidMoves(checkersMap.getMap());
+            int hasMoves = piece.checkValidMoves(checkersMap.getMap());
 
-            if (hasMoves) {
+            if (hasMoves > 0) {
                 movePieces.add(piece);
-
-                for (Movement movement : piece.getValidMoves()) {
-                    if (movement.isEatMovement()) {
-                        newMovement = movement;
-                        p = piece;
-                        p.setMovement(newMovement);
-                    }
+                if (piece.canEat()) {
+                    p = piece;
                 }
             }
 
@@ -93,9 +88,57 @@ public class GameActivity extends AppCompatActivity {
                 newMovement = p.getValidMoves().get(random);
                 p.setMovement(newMovement);
             }
+
             imageViews[p.getX()][p.getY()].setImageDrawable(null);
-            imageViews[newMovement.getGoX()][newMovement.getGoY()].setImageDrawable(iaDrawable);
-            checkersMap.movePiece(p, imageViews, scorePlayer, scoreIa);
+            checkersMap.movePiece(p, imageViews, scoreIa, scorePlayer);
+            imageViews[p.getX()][p.getY()].setImageDrawable(iaDrawable);
+
+            if (p.canEat()) {
+                p.setCanEat(false);
+                p.checkValidMoves(checkersMap.getMap());
+                if (p.canEat()) {
+                    imageViews[p.getX()][p.getY()].setImageDrawable(null);
+                    checkersMap.movePiece(p, imageViews, scoreIa, scorePlayer);
+                    imageViews[p.getX()][p.getY()].setImageDrawable(iaDrawable);
+                    p.setCanEat(false);
+                }
+            }
+        }
+    }
+
+    private void playerClick(ImageView cell, int selX, int selY) {
+        if (player.getSelectedPiece() == null) {
+            player.setSelectedPiece(checkersMap.getPlayerPiece(selX,selY));
+            if (player.getSelectedPiece() != null) {
+                cell.setBackgroundColor(green);
+            }
+        } else {
+            Piece selected = player.getSelectedPiece();
+
+            int hasMoves = selected.checkValidMoves(checkersMap.getMap());
+
+            if (hasMoves == 2) {
+                Movement eatMovement = selected.getMovement();
+            }
+
+            int x = selected.getX();
+            int y = selected.getY();
+            imageViews[x][y].setBackgroundColor(black);
+            selected.move(selX,selY);
+
+            boolean moved = checkersMap.movePiece(selected, imageViews, scoreIa, scorePlayer);
+
+            if (moved) {
+                imageViews[x][y].setImageDrawable(null);
+                x = selected.getX();
+                y = selected.getY();
+                imageViews[x][y].setImageDrawable(playerDrawable);
+
+                if (!selected.getMovement().isEatMovement() || selected.checkValidMoves(checkersMap.getMap()) != 2) {
+                    moveIA();
+                }
+            }
+            player.setSelectedPiece(null);
         }
     }
 
@@ -103,1728 +146,448 @@ public class GameActivity extends AppCompatActivity {
         cell00.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,0));
-                    if (player.getSelectedPiece() != null) {
-                        cell00.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(0,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell00, 0, 0);
             }
         });
 
         cell01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,1));
-                    if (player.getSelectedPiece() != null) {
-                        cell01.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(0,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell01, 0, 1);
             }
         });
 
         cell02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,2));
-                    if (player.getSelectedPiece() != null) {
-                        cell02.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(0,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell02, 0, 2);
             }
         });
 
         cell03.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,3));
-                    if (player.getSelectedPiece() != null) {
-                        cell03.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(0,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell03, 0, 3);
             }
         });
 
         cell04.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,4));
-                    if (player.getSelectedPiece() != null) {
-                        cell04.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(0,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell04, 0, 4);
             }
         });
 
         cell05.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,5));
-                    if (player.getSelectedPiece() != null) {
-                        cell05.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(0,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell05, 0, 5);
             }
         });
 
         cell06.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,6));
-                    if (player.getSelectedPiece() != null) {
-                        cell06.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(0,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell06, 0, 6);
             }
         });
 
         cell07.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(0,7));
-                    if (player.getSelectedPiece() != null) {
-                        cell07.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(0,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell07, 0, 7);
             }
         });
 
         cell10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,0));
-                    if (player.getSelectedPiece() != null) {
-                        cell10.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(1,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell10, 1, 0);
             }
         });
 
         cell11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,1));
-                    if (player.getSelectedPiece() != null) {
-                        cell11.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(1,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell11, 1, 1);
             }
         });
 
         cell12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,2));
-                    if (player.getSelectedPiece() != null) {
-                        cell12.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(1,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell12, 1, 2);
             }
         });
 
         cell13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,3));
-                    if (player.getSelectedPiece() != null) {
-                        cell13.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(1,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell13, 1, 3);
             }
         });
 
         cell14.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,4));
-                    if (player.getSelectedPiece() != null) {
-                        cell14.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(1,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell14, 1, 4);
             }
         });
 
         cell15.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,5));
-                    if (player.getSelectedPiece() != null) {
-                        cell15.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(1,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell15, 1, 5);
             }
         });
 
         cell16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,6));
-                    if (player.getSelectedPiece() != null) {
-                        cell16.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(1,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell16, 1, 6);
             }
         });
 
         cell17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(1,7));
-                    if (player.getSelectedPiece() != null) {
-                        cell17.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(1,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell17, 1, 7);
             }
         });
 
         cell20.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,0));
-                    if (player.getSelectedPiece() != null) {
-                        cell20.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(2,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell20, 2, 0);
             }
         });
 
         cell21.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,1));
-                    if (player.getSelectedPiece() != null) {
-                        cell21.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(2,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell21, 2, 1);
             }
         });
 
         cell22.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,2));
-                    if (player.getSelectedPiece() != null) {
-                        cell22.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(2,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell22, 2, 2);
             }
         });
 
         cell23.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,3));
-                    if (player.getSelectedPiece() != null) {
-                        cell23.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(2,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell23, 2, 3);
             }
         });
 
         cell24.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,4));
-                    if (player.getSelectedPiece() != null) {
-                        cell24.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(2,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell24, 2, 4);
             }
         });
 
         cell25.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,5));
-                    if (player.getSelectedPiece() != null) {
-                        cell25.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(2,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell25, 2, 5);
             }
         });
 
         cell26.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,6));
-                    if (player.getSelectedPiece() != null) {
-                        cell26.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(2,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell26, 2, 6);
             }
         });
 
         cell27.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(2,7));
-                    if (player.getSelectedPiece() != null) {
-                        cell27.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(2,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell27, 2, 7);
             }
         });
 
         cell30.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,0));
-                    if (player.getSelectedPiece() != null) {
-                        cell30.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(3,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell30, 3, 0);
             }
         });
 
         cell31.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,1));
-                    if (player.getSelectedPiece() != null) {
-                        cell31.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(3,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell31, 3, 1);
             }
         });
 
         cell32.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,2));
-                    if (player.getSelectedPiece() != null) {
-                        cell32.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(3,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell32, 3, 2);
             }
         });
 
         cell33.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,3));
-                    if (player.getSelectedPiece() != null) {
-                        cell33.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(3,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell33, 3, 3);
             }
         });
 
         cell34.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,4));
-                    if (player.getSelectedPiece() != null) {
-                        cell34.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(3,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell34, 3, 4);
             }
         });
 
         cell35.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,5));
-                    if (player.getSelectedPiece() != null) {
-                        cell35.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(3,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell35, 3, 5);
             }
         });
 
         cell36.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,6));
-                    if (player.getSelectedPiece() != null) {
-                        cell36.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(3,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell36, 3, 6);
             }
         });
 
         cell37.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(3,7));
-                    if (player.getSelectedPiece() != null) {
-                        cell37.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(3,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell37, 3, 7);
             }
         });
 
         cell40.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,0));
-                    if (player.getSelectedPiece() != null) {
-                        cell40.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(4,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell40, 4, 0);
             }
         });
 
         cell41.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,1));
-                    if (player.getSelectedPiece() != null) {
-                        cell41.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(4,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell41, 4, 1);
             }
         });
 
         cell42.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,2));
-                    if (player.getSelectedPiece() != null) {
-                        cell42.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(4,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell42, 4, 2);
             }
         });
 
         cell43.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,3));
-                    if (player.getSelectedPiece() != null) {
-                        cell43.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(4,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell43, 4, 3);
             }
         });
 
         cell44.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,4));
-                    if (player.getSelectedPiece() != null) {
-                        cell44.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(4,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell44, 4, 4);
             }
         });
 
         cell45.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,5));
-                    if (player.getSelectedPiece() != null) {
-                        cell45.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(4,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell45, 4, 5);
             }
         });
 
         cell46.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,6));
-                    if (player.getSelectedPiece() != null) {
-                        cell46.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(4,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell46, 4, 6);
             }
         });
 
         cell47.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(4,7));
-                    if (player.getSelectedPiece() != null) {
-                        cell47.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(4,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell47, 4, 7);
             }
         });
 
         cell50.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,0));
-                    if (player.getSelectedPiece() != null) {
-                        cell50.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(5,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell50, 5, 0);
             }
         });
 
         cell51.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,1));
-                    if (player.getSelectedPiece() != null) {
-                        cell51.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(5,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell51, 5, 1);
             }
         });
 
         cell52.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,2));
-                    if (player.getSelectedPiece() != null) {
-                        cell52.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(5,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell52, 5, 2);
             }
         });
 
         cell53.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,3));
-                    if (player.getSelectedPiece() != null) {
-                        cell53.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(5,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell53, 5, 3);
             }
         });
 
         cell54.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,4));
-                    if (player.getSelectedPiece() != null) {
-                        cell54.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(5,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell54, 5, 4);
             }
         });
 
         cell55.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,5));
-                    if (player.getSelectedPiece() != null) {
-                        cell55.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(5,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell55, 5, 5);
             }
         });
 
         cell56.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,6));
-                    if (player.getSelectedPiece() != null) {
-                        cell56.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(5,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell56, 5, 6);
             }
         });
 
         cell57.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(5,7));
-                    if (player.getSelectedPiece() != null) {
-                        cell57.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(5,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell57, 5, 7);
             }
         });
 
         cell60.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,0));
-                    if (player.getSelectedPiece() != null) {
-                        cell60.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(6,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell60, 6, 0);
             }
         });
 
         cell61.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,1));
-                    if (player.getSelectedPiece() != null) {
-                        cell61.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(6,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell61, 6, 1);
             }
         });
 
         cell62.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,2));
-                    if (player.getSelectedPiece() != null) {
-                        cell62.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(6,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell62, 6, 2);
             }
         });
 
         cell63.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,3));
-                    if (player.getSelectedPiece() != null) {
-                        cell63.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(6,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell63, 6, 3);
             }
         });
 
         cell64.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,4));
-                    if (player.getSelectedPiece() != null) {
-                        cell64.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(6,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell64, 6, 4);
             }
         });
 
         cell65.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,5));
-                    if (player.getSelectedPiece() != null) {
-                        cell65.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(6,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell65, 6, 5);
             }
         });
 
         cell66.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,6));
-                    if (player.getSelectedPiece() != null) {
-                        cell66.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(6,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell66, 6, 6);
             }
         });
 
         cell67.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(6,7));
-                    if (player.getSelectedPiece() != null) {
-                        cell67.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(6,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell67, 6, 7);
             }
         });
 
         cell70.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,0));
-                    if (player.getSelectedPiece() != null) {
-                        cell70.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(7,0);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell70, 7, 0);
             }
         });
 
         cell71.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,1));
-                    if (player.getSelectedPiece() != null) {
-                        cell71.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(7,1);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell71, 7, 1);
             }
         });
 
         cell72.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,2));
-                    if (player.getSelectedPiece() != null) {
-                        cell72.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(7,2);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell72, 7, 2);
             }
         });
 
         cell73.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,3));
-                    if (player.getSelectedPiece() != null) {
-                        cell73.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(7,3);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell73, 7, 3);
             }
         });
 
         cell74.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,4));
-                    if (player.getSelectedPiece() != null) {
-                        cell74.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(7,4);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell74, 7, 4);
             }
         });
 
         cell75.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,5));
-                    if (player.getSelectedPiece() != null) {
-                        cell75.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(7,5);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell75, 7, 5);
             }
         });
 
         cell76.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,6));
-                    if (player.getSelectedPiece() != null) {
-                        cell76.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(7,6);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell76, 7, 6);
             }
         });
 
         cell77.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (player.getSelectedPiece() == null) {
-                    player.setSelectedPiece(checkersMap.getPlayerPiece(7,7));
-                    if (player.getSelectedPiece() != null) {
-                        cell77.setBackgroundColor(green);
-                    }
-                } else {
-                    Piece selected = player.getSelectedPiece();
-                    int x = selected.getX();
-                    int y = selected.getY();
-                    imageViews[x][y].setBackgroundColor(black);
-                    selected.move(7,7);
-                    boolean moved = checkersMap.movePiece(selected, imageViews, scorePlayer, scoreIa);
-                    if (moved) {
-                        imageViews[x][y].setImageDrawable(null);
-                        x = selected.getX();
-                        y = selected.getY();
-                        imageViews[x][y].setImageDrawable(playerDrawable);
-                        moveIA();
-                    }
-                    player.setSelectedPiece(null);
-                }
+                playerClick(cell77, 7, 7);
             }
         });
     }
@@ -1839,8 +602,11 @@ public class GameActivity extends AppCompatActivity {
         green = getResources().getColor(R.color.green);
         black = getResources().getColor(R.color.black);
 
-        scorePlayer = findViewById(R.id.scoreIA);
-        scoreIa = findViewById(R.id.scorePlayer);
+        scorePlayer = findViewById(R.id.scorePlayer);
+        scoreIa = findViewById(R.id.scoreIA);
+        logs = findViewById(R.id.tvLogs);
+
+        checkersMap.setLogs(logs);
 
         cell00 = findViewById(R.id.square_00);
         imageViews[0][0] = cell00;

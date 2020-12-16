@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
     public void Play(View view){
         Intent jugar = new Intent(this, GameActivity.class);
         startActivity(jugar);

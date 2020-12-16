@@ -1,15 +1,19 @@
 package com.example.checkers;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class Piece {
     private int x;
     private int y;
-
     private int type = 0;
+
     private boolean isKing = false;
-    private Movement movement = new Movement(this);
     private boolean isEated = false;
+    private boolean canEat = false;
+
+    private Movement movement = new Movement(this);
     private LinkedList<Movement> validMoves;
 
     public Piece(int x, int y) {
@@ -36,6 +40,14 @@ public class Piece {
     void move(int x, int y) {
         movement = new Movement(this, x, y);
         return;
+    }
+
+    public boolean canEat() {
+        return canEat;
+    }
+
+    public void setCanEat(boolean canEat) {
+        this.canEat = canEat;
     }
 
     public boolean isEated() {
@@ -95,14 +107,22 @@ public class Piece {
         return validMoves;
     }
 
-    public boolean checkValidMoves(Piece[][] map) {
-        boolean hasMoves = false;
+    public int checkValidMoves(Piece[][] map) {
+        int hasMoves = 0;
         validMoves = MoveChecker.getMovements(this, map);
 
         if (validMoves.size() > 0) {
-            hasMoves = true;
+            hasMoves = 1;
+            for (Movement movement: validMoves) {
+                if (movement.isEatMovement()) {
+                    setMovement(movement);
+                    canEat = true;
+                    hasMoves = 2;
+                }
+            }
         }
 
+        Collections.sort(validMoves);
         return hasMoves;
     }
 
