@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +24,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView cell70, cell71, cell72, cell73, cell74, cell75, cell76, cell77;
     private ImageView[][] imageViews = new ImageView[8][8];
 
-    LinkedList<Movement> moves = null;
+    private LinkedList<Movement> playerMoves = null;
 
     private TextView scorePlayer, scoreIa, logs;
 
@@ -251,9 +250,13 @@ public class GameActivity extends AppCompatActivity {
                 cell.setBackgroundColor(green);
                 System.out.println(player.getSelectedPiece().checkValidMoves(checkersMap.getMap()));
                 if(player.getSelectedPiece().getValidMoves() != null) {
-                    moves = player.getSelectedPiece().getValidMoves();
-                    for (Movement move : moves) {
-                        imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(blue);
+                    playerMoves = player.getSelectedPiece().getValidMoves();
+                    for (Movement move : playerMoves) {
+                        if (move.isEatMovement()) {
+                            imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackgroundColor(blue);
+                        } else {
+                            imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(blue);
+                        }
                         System.out.println(move.toString());
                     }
                 }
@@ -311,9 +314,13 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
 
-            if (moves != null) {
-                for (Movement move : moves) {
-                    imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(black);
+            if (playerMoves != null) {
+                for (Movement move : playerMoves) {
+                    if (move.isEatMovement()) {
+                        imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackgroundColor(black);
+                    } else {
+                        imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(black);
+                    }
                     System.out.println(move.toString());
                 }
             }
