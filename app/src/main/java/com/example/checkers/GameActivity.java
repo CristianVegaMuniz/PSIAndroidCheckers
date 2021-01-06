@@ -2,6 +2,9 @@ package com.example.checkers;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -96,6 +99,34 @@ public class GameActivity extends AppCompatActivity {
             checkersMap.movePiece(p, imageViews, scoreIa, scorePlayer);
             imageViews[p.getX()][p.getY()].setImageDrawable(iaDrawable);
 
+            if(checkersMap.getPlayerPieces().isEmpty()){
+                System.out.println("GANA IA");
+
+                Context context = this;
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                builder1.setMessage("You lose!\n Quieres jugar otra vez?");
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
+
             if (p.canEat()) {
                 p.setCanEat(false);
                 p.checkValidMoves(checkersMap.getMap());
@@ -105,8 +136,9 @@ public class GameActivity extends AppCompatActivity {
                     imageViews[p.getX()][p.getY()].setImageDrawable(iaDrawable);
                     p.setCanEat(false);
                 }
+                }
             }
-        }
+
     }
 
     private void playerClick(ImageView cell, int selX, int selY) {
@@ -145,6 +177,35 @@ public class GameActivity extends AppCompatActivity {
                 x = selected.getX();
                 y = selected.getY();
                 imageViews[x][y].setImageDrawable(playerDrawable);
+
+                if(checkersMap.getIaPieces().isEmpty()){
+                    System.out.println("GANA PLAYER");
+
+                    Context context = this;
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                    builder1.setMessage("You WIN!\n Quieres jugar otra vez?");
+                    builder1.setCancelable(true);
+
+                    builder1.setPositiveButton(
+                            "Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    builder1.setNegativeButton(
+                            "No",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog alert11 = builder1.create();
+                    alert11.show();
+                }
+
                 if (!selected.getMovement().isEatMovement() || selected.checkValidMoves(checkersMap.getMap()) != 2) {
                     moveIA();
                 }
@@ -156,6 +217,7 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
             player.setSelectedPiece(null);
+
         }
     }
 
