@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -81,11 +82,9 @@ public class GameActivity extends AppCompatActivity {
                     p = piece;
                 }
             }
-
         }
 
         if (movePieces.size() > 0) {
-
             if (p == null) {
                 Random rand = new Random();
                 int upperbound = movePieces.size();
@@ -113,19 +112,19 @@ public class GameActivity extends AppCompatActivity {
                 builder1.setMessage("You lose!\n Quieres jugar otra vez?");
                 builder1.setCancelable(true);
 
-                builder1.setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
+                builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+                                finish();
+                                startActivity(getIntent());
                             }
                         });
 
-                builder1.setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
+                builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+                                Intent mainActivity = new Intent(null, MainActivity.class);
+                                startActivity(mainActivity);
                             }
                         });
 
@@ -192,17 +191,13 @@ public class GameActivity extends AppCompatActivity {
                     builder1.setMessage("You WIN!\n Quieres jugar otra vez?");
                     builder1.setCancelable(true);
 
-                    builder1.setPositiveButton(
-                            "Yes",
-                            new DialogInterface.OnClickListener() {
+                    builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
                                 }
                             });
 
-                    builder1.setNegativeButton(
-                            "No",
-                            new DialogInterface.OnClickListener() {
+                    builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
                                 }
@@ -212,10 +207,11 @@ public class GameActivity extends AppCompatActivity {
                     alert11.show();
                 }
 
-                if (!selected.getMovement().isEatMovement() || selected.checkValidMoves(checkersMap.getMap()) != 2) {
+                if (!selected.getMovement().isEatMovement()) {
                     moveIA();
                 }
             }
+
             if (moves != null) {
                 for (Movement move : moves) {
                     imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(black);
