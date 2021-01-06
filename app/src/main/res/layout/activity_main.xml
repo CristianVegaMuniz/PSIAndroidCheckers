@@ -6,46 +6,95 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvTitle"
-        android:text="Android Checkers"
-        android:textSize="39sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="154dp"
-        android:layout_height="112dp"
-        android:onClick="Play"
-        android:text="Start Game"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvTitle"
+            android:text="@string/app_name"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="20dp"/>
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="122dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="25dp"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:srcCompat="@drawable/sin_t_tulo"
-        tools:layout_editor_absoluteY="495dp"
-        tools:ignore="MissingConstraints" />
+        <RelativeLayout
+            android:id="@+id/teamPics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTitle">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="122dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="25dp"
+            <ImageView
+                android:id="@+id/imgTeam1"
+                android:layout_width="122dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="20dp"
+                app:srcCompat="@drawable/sin_t_tulo"/>
 
-        tools:srcCompat="@tools:sample/avatars"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintLeft_toRightOf="@id/imageView2"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvLevelInfo"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="5dp"
+            android:layout_below="@id/teamPics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Select the desired level: "
+            android:textSize="35sp" />
+
+        <RelativeLayout
+            android:id="@+id/btnLevels"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/tvLevelInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/easyBtn"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_width="220dp"
+                android:textSize="20dp"
+                android:layout_height="110dp"
+                android:onClick="PlayEasy"
+                android:text="Start Easy Game"/>
+
+            <Button
+                android:id="@+id/normalBtn"
+                android:layout_below="@id/easyBtn"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_width="220dp"
+                android:textSize="20dp"
+                android:layout_height="110dp"
+                android:onClick="PlayNormal"
+                android:text="Start Normal Game"/>
+
+            <Button
+                android:id="@+id/hardBtn"
+                android:layout_below="@id/normalBtn"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_width="220dp"
+                android:textSize="20dp"
+                android:layout_height="110dp"
+                android:onClick="PlayHard"
+                android:text="Start Hard Game"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

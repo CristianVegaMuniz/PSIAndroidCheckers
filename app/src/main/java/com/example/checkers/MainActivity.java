@@ -7,6 +7,9 @@ import android.view.View;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
+    int easy = 0;
+    int normal = 1;
+    int hard = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,10 +17,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void Play(View view){
-        Intent jugar = new Intent(this, GameActivity.class);
-        startActivity(jugar);
+    public void PlayEasy(View view){
+        Intent playActivity = new Intent(this, GameActivity.class);
+        playActivity.putExtra("LEVEL", easy);
+        startActivity(playActivity);
     }
 
+    public void PlayNormal(View view){
+        Intent playActivity = new Intent(this, GameActivity.class);
+        playActivity.putExtra("LEVEL", normal);
+        startActivity(playActivity);
+    }
+
+    public void PlayHard(View view){
+        Intent playActivity = new Intent(this, GameActivity.class);
+        playActivity.putExtra("LEVEL", hard);
+        startActivity(playActivity);
+    }
 
 }

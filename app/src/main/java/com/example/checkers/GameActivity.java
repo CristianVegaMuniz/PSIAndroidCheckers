@@ -45,6 +45,8 @@ public class GameActivity extends AppCompatActivity {
     private CheckersMap checkersMap = new CheckersMap();
     private Player player = new Player();
 
+    int level = 0; // Easy = 0; Normal = 1; Hard = 2
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,10 @@ public class GameActivity extends AppCompatActivity {
         System.out.println("         Starting match!");
         System.out.println("*********************************\n");
         checkersMap.showMap();
+
+        // If the LEVEL param not exists level will be a 0
+        level = getIntent().getIntExtra("LEVEL", 0);
+        System.out.println("The level selected is: " + level);
     }
 
     private void moveIA() {
