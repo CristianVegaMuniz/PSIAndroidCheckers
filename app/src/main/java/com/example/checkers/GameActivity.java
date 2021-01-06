@@ -66,6 +66,103 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void moveIA() {
+        switch(level) {
+            case 0:
+                System.out.println("FACIL");
+                easyIA();
+                break;
+            case 1:
+                System.out.println("MEDIO");
+                mediumIA();
+                break;
+            case 2:
+                System.out.println("Dificil");
+                break;
+        }
+    }
+
+    private void easyIA() {
+        LinkedList<Piece> movePieces = new LinkedList<Piece>();
+        LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
+
+        Movement newMovement = null;
+        Piece p = null;
+
+        for (Piece piece : iaPieces) {
+            int hasMoves = piece.checkValidMoves(checkersMap.getMap());
+
+            if (hasMoves > 0) {
+                movePieces.add(piece);
+            }
+
+        }
+
+        if (movePieces.size() > 0) {
+
+            if (p == null) {
+                Random rand = new Random();
+                int upperbound = movePieces.size();
+                int random = rand.nextInt(upperbound);
+
+                p = movePieces.get(random);
+
+                Collections.sort(p.getValidMoves());
+
+                upperbound = p.getValidMoves().size();
+                random = rand.nextInt(upperbound);
+                newMovement = p.getValidMoves().get(random);
+                p.setMovement(newMovement);
+            }
+
+            imageViews[p.getX()][p.getY()].setImageDrawable(null);
+            checkersMap.movePiece(p, imageViews, scoreIa, scorePlayer);
+            imageViews[p.getX()][p.getY()].setImageDrawable(iaDrawable);
+
+            if(checkersMap.getPlayerPieces().isEmpty()){
+                System.out.println("GANA IA");
+
+                Context context = this;
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                builder1.setMessage("You lose!\n Quieres jugar otra vez?");
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
+
+            if (p.canEat()) {
+                p.setCanEat(false);
+                p.checkValidMoves(checkersMap.getMap());
+                if (p.canEat()) {
+                    imageViews[p.getX()][p.getY()].setImageDrawable(null);
+                    checkersMap.movePiece(p, imageViews, scoreIa, scorePlayer);
+                    imageViews[p.getX()][p.getY()].setImageDrawable(iaDrawable);
+                    p.setCanEat(false);
+                }
+            }
+        }
+
+
+
+    }
+
+    private void mediumIA() {
         LinkedList<Piece> movePieces = new LinkedList<Piece>();
         LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
 
