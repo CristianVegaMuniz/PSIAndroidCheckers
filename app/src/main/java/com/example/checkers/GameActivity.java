@@ -21,6 +21,8 @@ public class GameActivity extends AppCompatActivity {
     private ImageView cell70, cell71, cell72, cell73, cell74, cell75, cell76, cell77;
     private ImageView[][] imageViews = new ImageView[8][8];
 
+    LinkedList<Movement> moves = null;
+
     private TextView scorePlayer, scoreIa, logs;
 
     private Drawable blackPieceImg;
@@ -31,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
 
     private int green;
     private int black;
+    private int blue;
 
     public ImageView[][] getImageViews() {
         return imageViews;
@@ -107,10 +110,19 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void playerClick(ImageView cell, int selX, int selY) {
+
         if (player.getSelectedPiece() == null) {
             player.setSelectedPiece(checkersMap.getPlayerPiece(selX,selY));
             if (player.getSelectedPiece() != null) {
                 cell.setBackgroundColor(green);
+                System.out.println(player.getSelectedPiece().checkValidMoves(checkersMap.getMap()));
+                if(player.getSelectedPiece().getValidMoves() != null) {
+                    moves = player.getSelectedPiece().getValidMoves();
+                    for (Movement move : moves) {
+                        imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(blue);
+                        System.out.println(move.toString());
+                    }
+                }
             }
         } else {
             Piece selected = player.getSelectedPiece();
@@ -133,9 +145,14 @@ public class GameActivity extends AppCompatActivity {
                 x = selected.getX();
                 y = selected.getY();
                 imageViews[x][y].setImageDrawable(playerDrawable);
-
                 if (!selected.getMovement().isEatMovement() || selected.checkValidMoves(checkersMap.getMap()) != 2) {
                     moveIA();
+                }
+            }
+            if (moves != null) {
+                for (Movement move : moves) {
+                    imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(black);
+                    System.out.println(move.toString());
                 }
             }
             player.setSelectedPiece(null);
@@ -601,6 +618,7 @@ public class GameActivity extends AppCompatActivity {
 
         green = getResources().getColor(R.color.green);
         black = getResources().getColor(R.color.black);
+        blue = getResources().getColor(R.color.purple_700);
 
         scorePlayer = findViewById(R.id.scorePlayer);
         scoreIa = findViewById(R.id.scoreIA);
