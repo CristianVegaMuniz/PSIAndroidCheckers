@@ -131,7 +131,7 @@ public class GameActivity extends AppCompatActivity {
                         "Yes",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
+                                System.exit(0);
                             }
                         });
 
@@ -139,7 +139,9 @@ public class GameActivity extends AppCompatActivity {
                         "No",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
+                                finishAffinity();
+                                finish();
+                                System.exit(0);
                             }
                         });
 
@@ -211,17 +213,15 @@ public class GameActivity extends AppCompatActivity {
 
                 builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                finish();
-                                startActivity(getIntent());
+                                System.exit(0);
                             }
                         });
 
                 builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                Intent mainActivity = new Intent(null, MainActivity.class);
-                                startActivity(mainActivity);
+                                finishAffinity();
+                                finish();
+                                System.exit(0);
                             }
                         });
 
@@ -290,13 +290,15 @@ public class GameActivity extends AppCompatActivity {
 
                     builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
+                                    System.exit(0);
                                 }
                             });
 
                     builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
+                                    finishAffinity();
+                                    finish();
+                                    System.exit(0);
                                 }
                             });
 
