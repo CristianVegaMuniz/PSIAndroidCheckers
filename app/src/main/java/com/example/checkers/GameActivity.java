@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
@@ -23,14 +24,16 @@ public class GameActivity extends AppCompatActivity {
 
     private TextView scorePlayer, scoreIa, logs;
 
-    private Drawable blackPieceImg;
-    private Drawable whitePieceImg;
+    private Drawable blackPiece;
+    private Drawable blackKing;
+    private Drawable whitePiece;
+    private Drawable whiteKing;
 
     private Drawable playerDrawable;
     private Drawable iaDrawable;
 
     private int green;
-    private int black;
+    private int background_blacks;
     private int blue;
 
     public ImageView[][] getImageViews() {
@@ -41,13 +44,21 @@ public class GameActivity extends AppCompatActivity {
     private Player player = new Player();
     private  CheckersIA ia;
 
-    int level = 0; // Easy = 0; Normal = 1; Hard = 2
+    private int level = 0; // Easy = 0; Normal = 1; Hard = 2
+    private ScrollView logScroll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         ia = new CheckersIA(checkersMap);
+
+        blackKing = getResources().getDrawable(R.drawable.black_king);
+        blackPiece = getResources().getDrawable(R.drawable.black);
+        whitePiece = getResources().getDrawable(R.drawable.white);
+        whiteKing = getResources().getDrawable(R.drawable.white_king);
+        iaDrawable = whitePiece;
+        playerDrawable = blackPiece;
 
         init();
         setClickListeners();
@@ -67,14 +78,43 @@ public class GameActivity extends AppCompatActivity {
         System.out.print("Called IA with level: " + level + ".");
         if (iaPiece != null) {
             System.out.print(" Will move: " + iaPiece.toString());
-            imageViews[iaPiece.getX()][iaPiece.getY()].setImageDrawable(null);
+            deletePiece(iaPiece.getX(), iaPiece.getY());
             checkersMap.movePiece(iaPiece, imageViews, scoreIa, scorePlayer);
-            imageViews[iaPiece.getX()][iaPiece.getY()].setImageDrawable(iaDrawable);
+            drawPiece(iaPiece);
         } else {
             System.out.print(" No possible moves for the IA");
         }
 
         checkEndGame();
+        autoScroll();
+    }
+
+    private void autoScroll() {
+        logScroll.post(new Runnable() {
+            @Override
+            public void run() {
+                logScroll.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
+    }
+    private void drawPiece(Piece p) {
+        if (p.getType() == 1) {
+            if (p.isKing()) {
+                imageViews[p.getX()][p.getY()].setImageDrawable(blackKing);
+            } else {
+                imageViews[p.getX()][p.getY()].setImageDrawable(blackPiece);
+            }
+        } else {
+            if (p.isKing()) {
+                imageViews[p.getX()][p.getY()].setImageDrawable(whiteKing);
+            } else {
+                imageViews[p.getX()][p.getY()].setImageDrawable(whitePiece);
+            }
+        }
+    }
+
+    private void deletePiece(int x, int y) {
+        imageViews[x][y].setImageDrawable(null);
     }
 
     private void drawValidMoves(Piece piece) {
@@ -94,9 +134,9 @@ public class GameActivity extends AppCompatActivity {
         if (piece.getValidMoves() != null) {
             for (Movement move : piece.getValidMoves()) {
                 if (move.isEatMovement()) {
-                    imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackgroundColor(black);
+                    imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackgroundColor(background_blacks);
                 } else {
-                    imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(black);
+                    imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(background_blacks);
                 }
             }
         }
@@ -154,17 +194,17 @@ public class GameActivity extends AppCompatActivity {
             int x = selected.getX();
             int y = selected.getY();
 
-            imageViews[x][y].setBackgroundColor(black);
+            imageViews[x][y].setBackgroundColor(background_blacks);
             selected.move(selX,selY);
 
             boolean moved = checkersMap.movePiece(selected, imageViews, scoreIa, scorePlayer);
 
             if (moved) {
-                imageViews[x][y].setImageDrawable(null);
+                deletePiece(x,y);
                 x = selected.getX();
                 y = selected.getY();
-                imageViews[x][y].setImageDrawable(playerDrawable);
 
+                drawPiece(selected);
                 checkEndGame();
                 callIA();
             }
@@ -625,15 +665,11 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void init() {
-        blackPieceImg = getResources().getDrawable(R.drawable.black);
-        whitePieceImg = getResources().getDrawable(R.drawable.whites);
-
-        iaDrawable = whitePieceImg;
-        playerDrawable = blackPieceImg;
-
         green = getResources().getColor(R.color.green);
-        black = getResources().getColor(R.color.black);
+        background_blacks = getResources().getColor(R.color.background1);
         blue = getResources().getColor(R.color.purple_700);
+
+        logScroll = findViewById(R.id.scrollLogs);
 
         scorePlayer = findViewById(R.id.scorePlayer);
         scoreIa = findViewById(R.id.scoreIA);

@@ -16,6 +16,8 @@
             android:layout_height="wrap_content"
             android:text="@string/ia_score"
             android:textStyle="bold"
+            android:background="@color/background3"
+            android:textColor="@color/red"
             android:textSize="30sp"
             android:gravity="center_horizontal"
             android:paddingTop="10dp"
@@ -40,10 +42,10 @@
                 <ImageView
                     android:id="@+id/square_00"
                     android:layout_width="match_parent"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp"
                     tools:ignore="NestedWeights"
                     android:contentDescription="TODO" />
@@ -57,11 +59,11 @@
 
                 <ImageView
                     android:id="@+id/square_02"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -72,11 +74,11 @@
 
                 <ImageView
                     android:id="@+id/square_04"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -87,11 +89,11 @@
 
                 <ImageView
                     android:id="@+id/square_06"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -119,11 +121,11 @@
 
                 <ImageView
                     android:id="@+id/square_11"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -134,11 +136,11 @@
 
                 <ImageView
                     android:id="@+id/square_13"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -149,11 +151,11 @@
 
                 <ImageView
                     android:id="@+id/square_15"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -164,11 +166,11 @@
 
                 <ImageView
                     android:id="@+id/square_17"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -183,11 +185,11 @@
 
                 <ImageView
                     android:id="@+id/square_20"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp"
                     tools:ignore="NestedWeights" />
 
@@ -199,11 +201,11 @@
 
                 <ImageView
                     android:id="@+id/square_22"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -214,11 +216,11 @@
 
                 <ImageView
                     android:id="@+id/square_24"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -229,11 +231,11 @@
 
                 <ImageView
                     android:id="@+id/square_26"
-                    android:src="@drawable/whites"
+                    android:src="@drawable/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -264,7 +266,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -278,7 +280,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -292,7 +294,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -306,7 +308,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -324,7 +326,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp"
                     tools:ignore="NestedWeights" />
 
@@ -339,7 +341,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -353,7 +355,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -367,7 +369,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -399,7 +401,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -414,7 +416,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -429,7 +431,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -444,7 +446,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -463,7 +465,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp"
                     tools:ignore="NestedWeights" />
 
@@ -479,7 +481,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -494,7 +496,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -509,7 +511,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -541,7 +543,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -556,7 +558,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -571,7 +573,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
 
                 <ImageView
@@ -589,7 +591,7 @@
                     android:layout_height="match_parent"
 
                     android:layout_weight="1"
-                    android:background="@android:color/background_dark"
+                    android:background="@color/background1"
                     android:padding="1dp" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -598,29 +600,36 @@
             <!-- Reapeat the LinearLayout 7 times too -->
         </LinearLayout>
 
-
-
         <TextView
             android:id="@+id/scorePlayer"
+            android:textColor="@color/red"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/player_score"
+            android:background="@color/background3"
             android:textSize="30sp"
             android:layout_below="@+id/linearLayout"
             android:paddingTop="10dp"
             android:textStyle="bold"
             android:paddingBottom="10dp"
             android:gravity="center_horizontal" />
+        <View
+            android:id="@+id/separator"
+            android:layout_below="@id/scorePlayer"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:paddingBottom="2dp"
+            android:background="@color/red"/>
 
         <ScrollView
             android:id="@+id/scrollLogs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/whitecell"
-            android:layout_below="@+id/scorePlayer">
+            android:background="@color/background3"
+            android:layout_below="@+id/separator">
             <TextView
                 android:id="@+id/tvLogs"
+                android:paddingBottom="3dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/red"
