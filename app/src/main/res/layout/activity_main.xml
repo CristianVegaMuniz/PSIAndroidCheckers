@@ -57,9 +57,9 @@
                 android:id="@+id/easyBtn"
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
-                android:layout_width="220dp"
-                android:textSize="30sp"
-                android:layout_height="110dp"
+                android:layout_width="180dp"
+                android:layout_height="80dp"
+                android:textSize="15sp"
                 android:onClick="PlayEasy"
                 android:text="@string/start_easy_game"/>
 
@@ -68,9 +68,9 @@
                 android:layout_below="@id/easyBtn"
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
-                android:layout_width="220dp"
-                android:textSize="30sp"
-                android:layout_height="110dp"
+                android:layout_width="180dp"
+                android:layout_height="80dp"
+                android:textSize="15sp"
                 android:onClick="PlayNormal"
                 android:text="@string/start_normal_game"/>
 
@@ -79,9 +79,9 @@
                 android:layout_below="@id/normalBtn"
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
-                android:layout_width="220dp"
-                android:textSize="30sp"
-                android:layout_height="110dp"
+                android:layout_width="180dp"
+                android:layout_height="80dp"
+                android:textSize="15sp"
                 android:onClick="PlayHard"
                 android:text="@string/start_hard_game"/>
 
