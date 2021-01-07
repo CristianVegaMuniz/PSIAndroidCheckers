@@ -99,43 +99,28 @@ public class GameActivity extends AppCompatActivity {
                 } else {
                     imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(black);
                 }
-                //System.out.println(move.toString());
             }
         }
     }
 
     private void checkEndGame() {
+        boolean finish = false;
+        String msg = "";
+
         if (checkersMap.getIaPieces().isEmpty()) {
             System.out.println("You Win!");
-
-            Context context = this;
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-            builder1.setMessage("You Win!\nDo you want to play again?");
-            builder1.setCancelable(true);
-
-            builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    System.exit(0);
-                }
-            });
-
-            builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    finishAffinity();
-                    finish();
-                    System.exit(0);
-                }
-            });
-
-            AlertDialog alert11 = builder1.create();
-            alert11.show();
-
+            msg = "You Win!\nDo you want to play again?";
+            finish = true;
         } else if (checkersMap.getPlayerPieces().isEmpty()) {
             System.out.println("IA Wins!");
+            msg = "IA Wins!\nDo you want to play again?";
+            finish = true;
+        }
 
+        if (finish) {
             Context context = this;
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-            builder1.setMessage("IA Wins!\nDo you want to play again?");
+            builder1.setMessage(msg);
             builder1.setCancelable(true);
 
             builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
