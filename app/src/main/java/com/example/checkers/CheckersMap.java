@@ -152,6 +152,7 @@ public class CheckersMap {
                 images[d.getMovement().getEatedPiece().getX()][d.getMovement().getEatedPiece().getY()].setImageDrawable(null);
                 eatPiece(d.getMovement().getEatedPiece(), d, tvScoreIa, tvScorePlayer);
             }
+
             try {
                 wait(1000000000);
             }catch (Exception e) {
@@ -162,7 +163,6 @@ public class CheckersMap {
             System.out.println("Wrong move. Try again!");
             return false;
         }
-
     }
 
     void setStartPosition() {

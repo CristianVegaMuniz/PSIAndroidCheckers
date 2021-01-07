@@ -335,21 +335,6 @@ public class MoveChecker {
                     break;
             }
         }
-        /*
-        if (list.size() > 0) {
-            System.out.println("Checked valid moves. Nº of valid movements: " + list.size());
-            for(Movement movenent : list) {
-                if (movenent.getPiece().isKing()) {
-                    System.out.print("\tKingMovement!");
-                }
-                if (movenent.isEatMovement()) {
-                    System.out.println("\tStart [" + movenent.getStartX() + "," + movenent.getStartY() +"] - Destiny [" + movenent.getGoX() + "," + movenent.getGoY() + "] "+ "- Eat Movement!");
-                } else {
-                    System.out.println("\tStart [" + movenent.getStartX() + "," + movenent.getStartY() +"] - Destiny [" + movenent.getGoX() + "," + movenent.getGoY() + "] ");
-                }
-            }
-        }
-        */
 
         return list;
     }

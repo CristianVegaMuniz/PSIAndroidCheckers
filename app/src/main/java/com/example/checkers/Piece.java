@@ -108,6 +108,7 @@ public class Piece {
     }
 
     public int checkValidMoves(Piece[][] map) {
+        canEat = false;
         int hasMoves = 0;
         validMoves = MoveChecker.getMovements(this, map);
 

@@ -44,6 +44,7 @@ public class GameActivity extends AppCompatActivity {
 
     private CheckersMap checkersMap = new CheckersMap();
     private Player player = new Player();
+    private  CheckersIA ia;
 
     int level = 0; // Easy = 0; Normal = 1; Hard = 2
 
@@ -51,6 +52,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        ia = new CheckersIA(checkersMap);
 
         init();
         setClickListeners();
@@ -65,213 +67,116 @@ public class GameActivity extends AppCompatActivity {
         System.out.println("The level selected is: " + level);
     }
 
-    private void moveIA() {
-        switch(level) {
-            case 0:
-                System.out.println("FACIL");
-                easyIA();
-                break;
-            case 1:
-                System.out.println("MEDIO");
-                mediumIA();
-                break;
-            case 2:
-                System.out.println("Dificil");
-                break;
+    private void callIA() {
+        Piece iaPiece = ia.moveIA(level);
+        System.out.print("Called IA with level: " + level + ".");
+        if (iaPiece != null) {
+            System.out.print(" Will move: " + iaPiece.toString());
+            imageViews[iaPiece.getX()][iaPiece.getY()].setImageDrawable(null);
+            checkersMap.movePiece(iaPiece, imageViews, scoreIa, scorePlayer);
+            imageViews[iaPiece.getX()][iaPiece.getY()].setImageDrawable(iaDrawable);
+        } else {
+            System.out.print(" No possible moves for the IA");
+        }
+
+        checkEndGame();
+    }
+
+    private void drawValidMoves(Piece piece) {
+        int hasMoves = piece.checkValidMoves(checkersMap.getMap());
+        if (hasMoves > 0) {
+            playerMoves = piece.getValidMoves();
+            for (Movement move : piece.getValidMoves()) {
+                if (move.isEatMovement()) {
+                    imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackgroundColor(blue);
+                } else {
+                    imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(blue);
+                }
+                //System.out.println(move.toString());
+            }
         }
     }
 
-    private void easyIA() {
-        LinkedList<Piece> movePieces = new LinkedList<Piece>();
-        LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
-
-        Movement newMovement = null;
-        Piece p = null;
-
-        for (Piece piece : iaPieces) {
-            int hasMoves = piece.checkValidMoves(checkersMap.getMap());
-
-            if (hasMoves > 0) {
-                movePieces.add(piece);
-            }
-
-        }
-
-        if (movePieces.size() > 0) {
-
-            if (p == null) {
-                Random rand = new Random();
-                int upperbound = movePieces.size();
-                int random = rand.nextInt(upperbound);
-
-                p = movePieces.get(random);
-
-                Collections.sort(p.getValidMoves());
-
-                upperbound = p.getValidMoves().size();
-                random = rand.nextInt(upperbound);
-                newMovement = p.getValidMoves().get(random);
-                p.setMovement(newMovement);
-            }
-
-            imageViews[p.getX()][p.getY()].setImageDrawable(null);
-            checkersMap.movePiece(p, imageViews, scoreIa, scorePlayer);
-            imageViews[p.getX()][p.getY()].setImageDrawable(iaDrawable);
-
-            if(checkersMap.getPlayerPieces().isEmpty()){
-                System.out.println("GANA IA");
-
-                Context context = this;
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                builder1.setMessage("You lose!\n Quieres jugar otra vez?");
-                builder1.setCancelable(true);
-
-                builder1.setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                System.exit(0);
-                            }
-                        });
-
-                builder1.setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                finishAffinity();
-                                finish();
-                                System.exit(0);
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-            }
-
-            if (p.canEat()) {
-                p.setCanEat(false);
-                p.checkValidMoves(checkersMap.getMap());
-                if (p.canEat()) {
-                    imageViews[p.getX()][p.getY()].setImageDrawable(null);
-                    checkersMap.movePiece(p, imageViews, scoreIa, scorePlayer);
-                    imageViews[p.getX()][p.getY()].setImageDrawable(iaDrawable);
-                    p.setCanEat(false);
+    private void removeValidMoves(Piece piece) {
+        if (piece.getValidMoves() != null) {
+            for (Movement move : piece.getValidMoves()) {
+                if (move.isEatMovement()) {
+                    imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackgroundColor(black);
+                } else {
+                    imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(black);
                 }
+                //System.out.println(move.toString());
             }
         }
-
-
-
     }
 
-    private void mediumIA() {
-        LinkedList<Piece> movePieces = new LinkedList<Piece>();
-        LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
+    private void checkEndGame() {
+        if (checkersMap.getIaPieces().isEmpty()) {
+            System.out.println("You Win!");
 
-        Movement newMovement = null;
-        Piece p = null;
+            Context context = this;
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+            builder1.setMessage("You Win!\nDo you want to play again?");
+            builder1.setCancelable(true);
 
-        for (Piece piece : iaPieces) {
-            int hasMoves = piece.checkValidMoves(checkersMap.getMap());
-
-            if (hasMoves > 0) {
-                movePieces.add(piece);
-                if (piece.canEat()) {
-                    p = piece;
+            builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    System.exit(0);
                 }
-            }
+            });
+
+            builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    finishAffinity();
+                    finish();
+                    System.exit(0);
+                }
+            });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+
+        } else if (checkersMap.getPlayerPieces().isEmpty()) {
+            System.out.println("IA Wins!");
+
+            Context context = this;
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+            builder1.setMessage("IA Wins!\nDo you want to play again?");
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    System.exit(0);
+                }
+            });
+
+            builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    finishAffinity();
+                    finish();
+                    System.exit(0);
+                }
+            });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
         }
-
-        if (movePieces.size() > 0) {
-            if (p == null) {
-                Random rand = new Random();
-                int upperbound = movePieces.size();
-                int random = rand.nextInt(upperbound);
-
-                p = movePieces.get(random);
-
-                Collections.sort(p.getValidMoves());
-
-                upperbound = p.getValidMoves().size();
-                random = rand.nextInt(upperbound);
-                newMovement = p.getValidMoves().get(random);
-                p.setMovement(newMovement);
-            }
-
-            imageViews[p.getX()][p.getY()].setImageDrawable(null);
-            checkersMap.movePiece(p, imageViews, scoreIa, scorePlayer);
-            imageViews[p.getX()][p.getY()].setImageDrawable(iaDrawable);
-
-            if(checkersMap.getPlayerPieces().isEmpty()){
-                System.out.println("GANA IA");
-
-                Context context = this;
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                builder1.setMessage("You lose!\n Quieres jugar otra vez?");
-                builder1.setCancelable(true);
-
-                builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                System.exit(0);
-                            }
-                        });
-
-                builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                finishAffinity();
-                                finish();
-                                System.exit(0);
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-            }
-
-            if (p.canEat()) {
-                p.setCanEat(false);
-                p.checkValidMoves(checkersMap.getMap());
-                if (p.canEat()) {
-                    imageViews[p.getX()][p.getY()].setImageDrawable(null);
-                    checkersMap.movePiece(p, imageViews, scoreIa, scorePlayer);
-                    imageViews[p.getX()][p.getY()].setImageDrawable(iaDrawable);
-                    p.setCanEat(false);
-                }
-                }
-            }
 
     }
 
     private void playerClick(ImageView cell, int selX, int selY) {
-
         if (player.getSelectedPiece() == null) {
             player.setSelectedPiece(checkersMap.getPlayerPiece(selX,selY));
             if (player.getSelectedPiece() != null) {
                 cell.setBackgroundColor(green);
-                System.out.println(player.getSelectedPiece().checkValidMoves(checkersMap.getMap()));
-                if(player.getSelectedPiece().getValidMoves() != null) {
-                    playerMoves = player.getSelectedPiece().getValidMoves();
-                    for (Movement move : playerMoves) {
-                        if (move.isEatMovement()) {
-                            imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackgroundColor(blue);
-                        } else {
-                            imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(blue);
-                        }
-                        System.out.println(move.toString());
-                    }
-                }
+                drawValidMoves(player.getSelectedPiece());
             }
+
         } else {
             Piece selected = player.getSelectedPiece();
-
-            int hasMoves = selected.checkValidMoves(checkersMap.getMap());
-
-            if (hasMoves == 2) {
-                Movement eatMovement = selected.getMovement();
-            }
-
             int x = selected.getX();
             int y = selected.getY();
+
             imageViews[x][y].setBackgroundColor(black);
             selected.move(selX,selY);
 
@@ -283,49 +188,12 @@ public class GameActivity extends AppCompatActivity {
                 y = selected.getY();
                 imageViews[x][y].setImageDrawable(playerDrawable);
 
-                if(checkersMap.getIaPieces().isEmpty()){
-                    System.out.println("GANA PLAYER");
-
-                    Context context = this;
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                    builder1.setMessage("You WIN!\n Quieres jugar otra vez?");
-                    builder1.setCancelable(true);
-
-                    builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    System.exit(0);
-                                }
-                            });
-
-                    builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    finishAffinity();
-                                    finish();
-                                    System.exit(0);
-                                }
-                            });
-
-                    AlertDialog alert11 = builder1.create();
-                    alert11.show();
-                }
-
-                if (!selected.getMovement().isEatMovement()) {
-                    moveIA();
-                }
+                checkEndGame();
+                callIA();
             }
 
-            if (playerMoves != null) {
-                for (Movement move : playerMoves) {
-                    if (move.isEatMovement()) {
-                        imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackgroundColor(black);
-                    } else {
-                        imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(black);
-                    }
-                    System.out.println(move.toString());
-                }
-            }
+            removeValidMoves(selected);
             player.setSelectedPiece(null);
-
         }
     }
 
@@ -924,8 +792,6 @@ public class GameActivity extends AppCompatActivity {
         imageViews[7][6] = cell76;
         cell77 = findViewById(R.id.square_77);
         imageViews[7][7] = cell77;
-        moveIA();
+        callIA();
     }
-
-
 }
