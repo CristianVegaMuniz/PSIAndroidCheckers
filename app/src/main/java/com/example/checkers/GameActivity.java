@@ -198,6 +198,7 @@ public class GameActivity extends AppCompatActivity {
             selected.move(selX,selY);
 
             boolean moved = checkersMap.movePiece(selected, imageViews, scoreIa, scorePlayer);
+            removeValidMoves(selected);
 
             if (moved) {
                 deletePiece(x,y);
@@ -209,7 +210,6 @@ public class GameActivity extends AppCompatActivity {
                 callIA();
             }
 
-            removeValidMoves(selected);
             player.setSelectedPiece(null);
         }
     }
