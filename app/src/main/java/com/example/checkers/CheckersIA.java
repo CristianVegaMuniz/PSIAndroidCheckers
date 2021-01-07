@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class CheckersIA {
-    int level = 0;
-    CheckersMap checkersMap = null;
+    private int level = 0;
+    private CheckersMap checkersMap = null;
 
     CheckersIA(CheckersMap map) {
         this.checkersMap = map;
@@ -29,74 +29,59 @@ public class CheckersIA {
         return piece;
     }
 
-    private Piece easyIA() {
-        LinkedList<Piece> movePieces = new LinkedList<Piece>();
+    private LinkedList<Piece> getValidPieces() {
+        LinkedList<Piece> validPieces = new LinkedList<Piece>();
         LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
-
-        Movement newMovement = null;
-        Piece p = null;
 
         for (Piece piece : iaPieces) {
             int hasMoves = piece.checkValidMoves(checkersMap.getMap());
 
             if (hasMoves > 0) {
-                movePieces.add(piece);
+                validPieces.add(piece);
             }
         }
 
-        if (movePieces.size() > 0) {
-            Random rand = new Random();
-            int upperbound = movePieces.size();
-            int random = rand.nextInt(upperbound);
+        return validPieces;
+    }
 
-            p = movePieces.get(random);
-
-            Collections.sort(p.getValidMoves());
-
-            upperbound = p.getValidMoves().size();
-            random = rand.nextInt(upperbound);
-            newMovement = p.getValidMoves().get(random);
-            p.setMovement(newMovement);
-        }
+    private Piece easyIA() {
+        LinkedList<Piece> validPieces = getValidPieces();
+        Piece p = selectRandomPiece(validPieces);
 
         return p;
     }
 
     private Piece mediumIA() {
-        LinkedList<Piece> movePieces = new LinkedList<Piece>();
-        LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
-
-        Movement newMovement = null;
+        LinkedList<Piece> validPieces = getValidPieces();
         Piece p = null;
 
-        for (Piece piece : iaPieces) {
-            int hasMoves = piece.checkValidMoves(checkersMap.getMap());
-
-            if (hasMoves > 0) {
-                movePieces.add(piece);
-                if (piece.canEat()) {
-                    p = piece;
-                }
-            }
+        for (Piece piece: validPieces) {
+            if (piece.canEat()) p = piece;
         }
 
-        if (movePieces.size() > 0) {
-            if (p == null) {
-                Random rand = new Random();
-                int upperbound = movePieces.size();
-                int random = rand.nextInt(upperbound);
-
-                p = movePieces.get(random);
-
-                Collections.sort(p.getValidMoves());
-
-                upperbound = p.getValidMoves().size();
-                random = rand.nextInt(upperbound);
-                newMovement = p.getValidMoves().get(random);
-                p.setMovement(newMovement);
-            }
+        if (p == null) {
+            p = selectRandomPiece(validPieces);
         }
 
         return p;
+    }
+
+    private Piece selectRandomPiece(LinkedList<Piece> validPieces) {
+        Piece selected = null;
+
+        if (validPieces.size() > 0) {
+            Random rand = new Random();
+            int upperbound = validPieces.size();
+            int random = rand.nextInt(upperbound);
+
+            selected = validPieces.get(random);
+            Collections.sort(selected.getValidMoves());
+
+            upperbound = selected.getValidMoves().size();
+            random = rand.nextInt(upperbound);
+            selected.setMovement(selected.getValidMoves().get(random));
+        }
+
+        return selected;
     }
 }
