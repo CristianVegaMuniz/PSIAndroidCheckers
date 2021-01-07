@@ -86,7 +86,6 @@ public class GameActivity extends AppCompatActivity {
                 } else {
                     imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(blue);
                 }
-                //System.out.println(move.toString());
             }
         }
     }
