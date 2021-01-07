@@ -1,19 +1,17 @@
 package com.example.checkers;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class Piece {
+public class Piece implements Comparable<Piece>{
     private int x;
     private int y;
+
+    private int id = 0;
     private int type = 0;
-
     private boolean isKing = false;
-    private boolean isEated = false;
-    private boolean canEat = false;
-
     private Movement movement = new Movement(this);
+    private boolean canEat = false;
     private LinkedList<Movement> validMoves;
 
     public Piece(int x, int y) {
@@ -22,14 +20,14 @@ public class Piece {
     }
 
     public Piece(Piece p) {
-        this.x = p.getX();
-        this.y = p.getY();
-        this.type = p.getType();
-        this.isKing = p.isKing();
-        this.movement = new Movement(p.getMovement());
+        this.x = p.x;
+        this.y = p.y;
+        this.id = p.id;
+        this.type = p.type;
+        this.isKing = p.isKing;
+        this.movement = new Movement(p.movement);
         this.movement.setPiece(this);
-        this.isEated = p.isEated();
-
+        this.canEat = p.canEat;
         if (p.getValidMoves() != null) {
             this.validMoves = new LinkedList<Movement>(p.getValidMoves());
         } else {
@@ -42,20 +40,20 @@ public class Piece {
         return;
     }
 
-    public boolean canEat() {
-        return canEat;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setCanEat(boolean canEat) {
         this.canEat = canEat;
     }
 
-    public boolean isEated() {
-        return isEated;
-    }
-
-    public void setEated(boolean isEated) {
-        this.isEated = isEated;
+    public boolean canEat() {
+        return canEat;
     }
 
     public int getX() {
@@ -108,8 +106,8 @@ public class Piece {
     }
 
     public int checkValidMoves(Piece[][] map) {
-        canEat = false;
         int hasMoves = 0;
+        canEat = false;
         validMoves = MoveChecker.getMovements(this, map);
 
         if (validMoves.size() > 0) {
@@ -119,12 +117,27 @@ public class Piece {
                     setMovement(movement);
                     canEat = true;
                     hasMoves = 2;
+                } else if (this.movement == null) {
+                    setMovement(movement);
                 }
             }
         }
 
         Collections.sort(validMoves);
         return hasMoves;
+    }
+
+    /* Only use when the piece has movements. The list of movements must be sorted */
+    @Override
+    public int compareTo(Piece p) {
+        if (this.validMoves.getFirst().getScore() > p.getValidMoves().getFirst().getScore()) return -1;
+        if (this.validMoves.getFirst().getScore() < p.getValidMoves().getFirst().getScore()) return 1;
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Piece on: " + x + "-" + y;
     }
 
 }

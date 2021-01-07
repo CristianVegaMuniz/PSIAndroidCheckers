@@ -1,7 +1,6 @@
 package com.example.checkers;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,8 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.*;
 
 public class GameActivity extends AppCompatActivity {
     private ImageView cell00, cell01, cell02, cell03, cell04, cell05, cell06, cell07;
@@ -23,8 +20,6 @@ public class GameActivity extends AppCompatActivity {
     private ImageView cell60, cell61, cell62, cell63, cell64, cell65, cell66, cell67;
     private ImageView cell70, cell71, cell72, cell73, cell74, cell75, cell76, cell77;
     private ImageView[][] imageViews = new ImageView[8][8];
-
-    private LinkedList<Movement> playerMoves = null;
 
     private TextView scorePlayer, scoreIa, logs;
 
@@ -85,7 +80,6 @@ public class GameActivity extends AppCompatActivity {
     private void drawValidMoves(Piece piece) {
         int hasMoves = piece.checkValidMoves(checkersMap.getMap());
         if (hasMoves > 0) {
-            playerMoves = piece.getValidMoves();
             for (Movement move : piece.getValidMoves()) {
                 if (move.isEatMovement()) {
                     imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackgroundColor(blue);
@@ -161,7 +155,6 @@ public class GameActivity extends AppCompatActivity {
             AlertDialog alert11 = builder1.create();
             alert11.show();
         }
-
     }
 
     private void playerClick(ImageView cell, int selX, int selY) {

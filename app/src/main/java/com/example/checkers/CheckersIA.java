@@ -1,9 +1,5 @@
 package com.example.checkers;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
@@ -103,5 +99,4 @@ public class CheckersIA {
 
         return p;
     }
-
 }
