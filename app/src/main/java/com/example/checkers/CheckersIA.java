@@ -5,17 +5,15 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class CheckersIA {
-    private int level = 0;
     private CheckersMap checkersMap = null;
 
     CheckersIA(CheckersMap map) {
         this.checkersMap = map;
     }
 
-    public Piece moveIA(int lvl) {
-        level = lvl;
+    public Piece moveIA(int lvl, int depth) {
         Piece piece = null;
-        switch(level) {
+        switch(lvl) {
             case 0:
                 piece = easyIA();
                 break;
@@ -23,6 +21,7 @@ public class CheckersIA {
                 piece = mediumIA();
                 break;
             case 2:
+                piece = hardIA(depth);
                 break;
         }
 
@@ -66,7 +65,26 @@ public class CheckersIA {
         return p;
     }
 
-    private Piece selectRandomPiece(LinkedList<Piece> validPieces) {
+    private Piece hardIA(int depth) {
+        Piece p = mediumIA();
+        /* MinMax */
+            // Take each valid iaPiece
+            // Set the score to each movement of each valid iaPiece
+            // Get the best movement and do it
+
+        /* Idea for MinMax with depth */
+            // Take each valid iaPiece
+            // Set the score to each movement of each valid iaPiece
+            // Try every movement (on a copy map)
+            // Get the best movement of the player (best response)
+            // Set the best response score
+            // triedMovementScore = triedMovementScore - bestResponseScore
+            // Repeat it recursively
+            // Get the best movement and do it
+        return p;
+    }
+
+        private Piece selectRandomPiece(LinkedList<Piece> validPieces) {
         Piece selected = null;
 
         if (validPieces.size() > 0) {

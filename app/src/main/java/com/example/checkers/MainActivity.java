@@ -7,9 +7,9 @@ import android.view.View;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
-    int easy = 0;
-    int normal = 1;
-    int hard = 2;
+    private int easy = 0;
+    private int normal = 1;
+    private int hard = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

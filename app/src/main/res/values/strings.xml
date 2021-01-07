@@ -4,4 +4,8 @@
     <string name="tv1">GameActivity</string>
     <string name="player_score">Player Score: 0</string>
     <string name="ia_score">IA Score: 0</string>
+    <string name="start_easy_game">Start Easy Game</string>
+    <string name="start_normal_game">Start Normal Game</string>
+    <string name="start_hard_game">Start Hard Game</string>
+    <string name="select_level">Select the desired level:</string>
 </resources>

@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Select the desired level: "
+            android:text="@string/select_level"
             android:textSize="35sp" />
 
         <RelativeLayout
@@ -58,10 +58,10 @@
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_width="220dp"
-                android:textSize="20dp"
+                android:textSize="30sp"
                 android:layout_height="110dp"
                 android:onClick="PlayEasy"
-                android:text="Start Easy Game"/>
+                android:text="@string/start_easy_game"/>
 
             <Button
                 android:id="@+id/normalBtn"
@@ -69,10 +69,10 @@
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_width="220dp"
-                android:textSize="20dp"
+                android:textSize="30sp"
                 android:layout_height="110dp"
                 android:onClick="PlayNormal"
-                android:text="Start Normal Game"/>
+                android:text="@string/start_normal_game"/>
 
             <Button
                 android:id="@+id/hardBtn"
@@ -80,10 +80,10 @@
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_width="220dp"
-                android:textSize="20dp"
+                android:textSize="30sp"
                 android:layout_height="110dp"
                 android:onClick="PlayHard"
-                android:text="Start Hard Game"/>
+                android:text="@string/start_hard_game"/>
 
         </RelativeLayout>
 

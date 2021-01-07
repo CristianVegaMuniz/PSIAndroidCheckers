@@ -63,7 +63,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void callIA() {
-        Piece iaPiece = ia.moveIA(level);
+        Piece iaPiece = ia.moveIA(level, 0);
         System.out.print("Called IA with level: " + level + ".");
         if (iaPiece != null) {
             System.out.print(" Will move: " + iaPiece.toString());
