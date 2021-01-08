@@ -10,7 +10,7 @@
     <color name="green">#26D12D</color>
     <color name="blue">#0633B8</color>
     <color name="red">#D50A1B</color>
-    <color name="background1">#A87831</color>
-    <color name="background2">#53360B</color>
+    <color name="background1">#53360B</color>
+    <color name="background2">#A87831</color>
     <color name="background3">#171715</color>
 </resources>

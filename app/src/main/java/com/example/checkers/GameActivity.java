@@ -1,5 +1,6 @@
 package com.example.checkers;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -51,6 +52,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
         ia = new CheckersIA(checkersMap);
 
         blackKing = getResources().getDrawable(R.drawable.black_king);

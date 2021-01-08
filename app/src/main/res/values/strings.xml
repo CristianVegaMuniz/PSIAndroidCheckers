@@ -7,5 +7,5 @@
     <string name="start_easy_game">Start Easy Game</string>
     <string name="start_normal_game">Start Normal Game</string>
     <string name="start_hard_game">Start Hard Game</string>
-    <string name="select_level">Select the desired level:</string>
+    <string name="select_level">Select the level:</string>
 </resources>
