@@ -12,5 +12,6 @@
     <color name="red">#D50A1B</color>
     <color name="background1">#53360B</color>
     <color name="background2">#A87831</color>
-    <color name="background3">#171715</color>
+    <color name="background3">#FFFFFF</color>
+    <color name="background4">#171715</color>
 </resources>

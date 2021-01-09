@@ -40,7 +40,7 @@ public class CheckersIA {
         return piece;
     }
 
-    private LinkedList<Piece> getValidPieces(CheckersMap map, Boolean IA) {
+    public LinkedList<Piece> getValidPieces(CheckersMap map, Boolean IA) {
         LinkedList<Piece> validPieces = new LinkedList<Piece>();
         if (IA) {
             LinkedList<Piece> iaPieces = map.getIaPieces();
@@ -146,6 +146,8 @@ public class CheckersIA {
                         //System.out.println("\tMovement updated: " + movement.toString());
 
                         testMap.movePiece(bestPlayerResponse);
+                    } else {
+                        movement.setScore(movement.getScore() + 50);
                     }
 
                     // Per each movement if depth > 1 we have to repeat the entire process for that map state
@@ -233,20 +235,20 @@ public class CheckersIA {
 
         // Puntuación laterales (non poden comer)
         if (movement.getGoY() == 0 || movement.getGoY() == 7) {
-            score += 4;
-        } else if (movement.getGoY() == 1 || movement.getGoY() == 6) {
-            score += 3;
-        } else if (movement.getGoY() == 2 || movement.getGoY() == 5) {
             score += 2;
+        } else if (movement.getGoY() == 1 || movement.getGoY() == 6) {
+            score += 1;
+        } else if (movement.getGoY() == 2 || movement.getGoY() == 5) {
+            score += 0;
         } else if (movement.getGoY() == 3 || movement.getGoY() == 4) {
-            score += 3;
+            score += 1;
         }
 
         // Puntuación coronar
         if (movement.getGoX() == 7) {
             // si xa e dama como o lateral
             if (piece.isKing()) {
-                score += 4;
+                score += 2;
             } else {
                 score += 10;
             }
@@ -254,14 +256,13 @@ public class CheckersIA {
             if (!piece.isKing() && piece.getType() == 2) {
                 score += movement.getGoX();
             } else if (!piece.isKing() && piece.getType() == 1) {
-                score += (7 - movement.getGoX()) ;
-
+                score += (7 - movement.getGoX());
             }
         }
 
         if (movement.isEatMovement()) {
             if (!eatable) {
-                score += 20;
+                score += 25;
             } else {
                 score += 10;
             }

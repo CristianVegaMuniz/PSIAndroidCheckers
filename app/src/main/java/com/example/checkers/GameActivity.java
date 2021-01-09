@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+
 public class GameActivity extends AppCompatActivity {
     private ImageView cell00, cell01, cell02, cell03, cell04, cell05, cell06, cell07;
     private ImageView cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17;
@@ -21,30 +23,25 @@ public class GameActivity extends AppCompatActivity {
     private ImageView cell50, cell51, cell52, cell53, cell54, cell55, cell56, cell57;
     private ImageView cell60, cell61, cell62, cell63, cell64, cell65, cell66, cell67;
     private ImageView cell70, cell71, cell72, cell73, cell74, cell75, cell76, cell77;
+
     private ImageView[][] imageViews = new ImageView[8][8];
 
-    private TextView scorePlayer, scoreIa, logs;
+    private TextView scorePlayer, scoreIa;
 
     private Drawable blackPiece;
     private Drawable blackKing;
     private Drawable whitePiece;
     private Drawable whiteKing;
 
-    private Drawable playerDrawable;
-    private Drawable iaDrawable;
-
     private int green;
     private int background_blacks;
     private int blue;
 
-    public ImageView[][] getImageViews() {
-        return imageViews;
-    }
-
-    private CheckersMap checkersMap = new CheckersMap();
-    private Player player = new Player();
+    private final CheckersMap checkersMap = new CheckersMap();
+    private final Player player = new Player();
     private  CheckersIA ia;
 
+    private boolean playerWhites = false;
     private int level = 0; // Easy = 0; Normal = 1; Hard = 2
     private int depth = 1; // minimax depth
     private ScrollView logScroll;
@@ -52,45 +49,41 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        level = getIntent().getIntExtra("LEVEL", 0);
+        playerWhites = getIntent().getBooleanExtra("WHITES", false);
+
+        if (playerWhites) {
+            setContentView(R.layout.activity_game_whites);
+        } else {
+            setContentView(R.layout.activity_game);
+        }
 
         blackKing = getResources().getDrawable(R.drawable.black_king);
         blackPiece = getResources().getDrawable(R.drawable.black);
         whitePiece = getResources().getDrawable(R.drawable.white);
         whiteKing = getResources().getDrawable(R.drawable.white_king);
-        iaDrawable = whitePiece;
-        playerDrawable = blackPiece;
 
         init();
         setClickListeners();
 
-        System.out.println("\n**********************************");
-        System.out.println("         Starting match!");
-        System.out.println("*********************************\n");
-        checkersMap.showMap();
-
-        // If the LEVEL param not exists level will be a 0
-        level = getIntent().getIntExtra("LEVEL", 0);
-        System.out.println("The level selected is: " + level);
         if (level == 2) depth = 3;
+        System.out.println("The level selected is: " + level + " with depth: " + depth);
         ia = new CheckersIA(checkersMap, level, depth);
 
-        callIA();
+        if (!playerWhites) {
+            callIA();
+        }
     }
 
     private void callIA() {
         Piece iaPiece = ia.moveIA();
-        System.out.print("Called IA with level: " + level + ".");
         if (iaPiece != null) {
-            System.out.print(" Will move: " + iaPiece.toString());
             deletePiece(iaPiece.getX(), iaPiece.getY());
             checkersMap.movePiece(iaPiece, imageViews, scoreIa, scorePlayer);
             drawPiece(iaPiece);
-        } else {
-            System.out.print(" No possible moves for the IA");
         }
 
-        checkEndGame();
+        checkEndGame(true);
         autoScroll();
     }
 
@@ -105,17 +98,35 @@ public class GameActivity extends AppCompatActivity {
 
     private void drawPiece(Piece p) {
         if (p.getType() == 1) {
-            if (p.isKing()) {
-                imageViews[p.getX()][p.getY()].setImageDrawable(blackKing);
+            if (playerWhites) {
+                if (p.isKing()) {
+                    imageViews[p.getX()][p.getY()].setImageDrawable(whiteKing);
+                } else {
+                    imageViews[p.getX()][p.getY()].setImageDrawable(whitePiece);
+                }
             } else {
-                imageViews[p.getX()][p.getY()].setImageDrawable(blackPiece);
+                if (p.isKing()) {
+                    imageViews[p.getX()][p.getY()].setImageDrawable(blackKing);
+                } else {
+                    imageViews[p.getX()][p.getY()].setImageDrawable(blackPiece);
+                }
             }
+
         } else {
-            if (p.isKing()) {
-                imageViews[p.getX()][p.getY()].setImageDrawable(whiteKing);
+            if (playerWhites) {
+                if (p.isKing()) {
+                    imageViews[p.getX()][p.getY()].setImageDrawable(blackKing);
+                } else {
+                    imageViews[p.getX()][p.getY()].setImageDrawable(blackPiece);
+                }
             } else {
-                imageViews[p.getX()][p.getY()].setImageDrawable(whitePiece);
+                if (p.isKing()) {
+                    imageViews[p.getX()][p.getY()].setImageDrawable(whiteKing);
+                } else {
+                    imageViews[p.getX()][p.getY()].setImageDrawable(whitePiece);
+                }
             }
+
         }
     }
 
@@ -148,18 +159,22 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void checkEndGame() {
+    private void checkEndGame(boolean IA) {
         boolean finish = false;
         String msg = "";
 
-        if (checkersMap.getIaPieces().isEmpty()) {
-            System.out.println("You Win!");
-            msg = "You Win!\nDo you want to play again?";
-            finish = true;
-        } else if (checkersMap.getPlayerPieces().isEmpty()) {
-            System.out.println("IA Wins!");
-            msg = "IA Wins!\nDo you want to play again?";
-            finish = true;
+        if (IA) {
+            LinkedList<Piece> plValidPîeces = ia.getValidPieces(checkersMap, false);
+            if (checkersMap.getPlayerPieces().isEmpty() || plValidPîeces.isEmpty()) {
+                msg = "IA Wins!\nDo you want to play again?";
+                finish = true;
+            }
+        } else {
+            LinkedList<Piece> iaValidPîeces = ia.getValidPieces(checkersMap, true);
+            if (checkersMap.getIaPieces().isEmpty() || iaValidPîeces.isEmpty()) {
+                msg = "You Win!\nDo you want to play again?";
+                finish = true;
+            }
         }
 
         if (finish) {
@@ -212,7 +227,7 @@ public class GameActivity extends AppCompatActivity {
                 y = selected.getY();
 
                 drawPiece(selected);
-                checkEndGame();
+                checkEndGame(false);
                 callIA();
             }
 
@@ -679,8 +694,8 @@ public class GameActivity extends AppCompatActivity {
 
         scorePlayer = findViewById(R.id.scorePlayer);
         scoreIa = findViewById(R.id.scoreIA);
-        logs = findViewById(R.id.tvLogs);
 
+        TextView logs = findViewById(R.id.tvLogs);
         checkersMap.setLogs(logs);
 
         cell00 = findViewById(R.id.square_00);

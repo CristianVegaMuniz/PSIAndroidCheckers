@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
+            android:textStyle="bold"
             android:text="@string/select_level"
             android:textSize="35sp" />
 
@@ -58,6 +59,24 @@
                 android:textSize="15sp"
                 android:onClick="PlayHard"
                 android:text="@string/start_hard_game"/>
+
+            <CheckBox
+                android:id="@+id/checkBox_blacks"
+                android:layout_below="@id/hardBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/background2"
+                android:checked="true"
+                android:text="Black Pieces" />
+
+            <CheckBox
+                android:id="@+id/checkBox_whites"
+                android:layout_toRightOf="@id/checkBox_blacks"
+                android:layout_below="@id/hardBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/background2"
+                android:text="White Pieces" />
 
         </RelativeLayout>
 
