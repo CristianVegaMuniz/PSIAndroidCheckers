@@ -175,22 +175,28 @@ public class CheckersIA {
     }
 
     private Piece getBestPlayerResponse(CheckersMap copyMap) {
-        Piece bestPlayerResponse = null;
-        LinkedList<Piece> playerPieces = getValidPieces(copyMap, false);
-        if (playerPieces.size() == 0) return null;
+        Piece bestPlayerPiece = null;
+        Movement bestPlayerMovement = null;
+        LinkedList<Piece> playerPieces = copyMap.getPlayerPieces();
 
-        for (Piece piece: playerPieces) {
-            for (Movement movement: piece.getValidMoves()) {
-                movement.setScore(calculateMovementScore(movement, piece, copyMap));
+        for (Piece piece : playerPieces) {
+            int hasMoves = piece.checkValidMoves(copyMap.getMap());
+
+            if (hasMoves > 0) {
+                for (Movement movement: piece.getValidMoves()) {
+                    movement.setScore(calculateMovementScore(movement, piece, copyMap));
+
+                    if (bestPlayerMovement == null ||bestPlayerMovement.getScore() < movement.getScore()) {
+                        bestPlayerMovement = movement;
+                        bestPlayerPiece = piece;
+                    }
+                }
             }
-            Collections.sort(piece.getValidMoves());
         }
-        Collections.sort(playerPieces);
 
-        bestPlayerResponse = playerPieces.getFirst();
-        bestPlayerResponse.setMovement(bestPlayerResponse.getValidMoves().getFirst());
+        bestPlayerPiece.setMovement(bestPlayerMovement);
 
-        return bestPlayerResponse;
+        return bestPlayerPiece;
     }
 
 
