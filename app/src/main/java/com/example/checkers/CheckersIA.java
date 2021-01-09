@@ -197,6 +197,9 @@ public class CheckersIA {
         int score = 0;
         if (willBeEatable(movement, piece, map)) {
             score -= 10;
+            if (piece.isKing()) {
+                score -= 5;
+            }
         }
 
         // Puntuación laterales (non poden comer)
@@ -220,7 +223,12 @@ public class CheckersIA {
             } else {
                 score += 6;
             }
+        } else {
+            if (!piece.isKing()) {
+                score += movement.getGoX();
+            }
         }
+
         if (movement.isEatMovement()) {
             score += 10;
             if (movement.getEatedPiece().isKing()) {

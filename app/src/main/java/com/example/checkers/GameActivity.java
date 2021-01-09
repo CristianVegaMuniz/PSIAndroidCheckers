@@ -102,7 +102,7 @@ public class GameActivity extends AppCompatActivity {
             }
         });
     }
-    
+
     private void drawPiece(Piece p) {
         if (p.getType() == 1) {
             if (p.isKing()) {
