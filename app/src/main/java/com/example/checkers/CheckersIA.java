@@ -28,30 +28,29 @@ public class CheckersIA {
         return piece;
     }
 
-    private LinkedList<Piece> getValidPieces(CheckersMap checkersMap, Boolean IA) {
+    private LinkedList<Piece> getValidPieces(CheckersMap map, Boolean IA) {
         LinkedList<Piece> validPieces = new LinkedList<Piece>();
         if (IA) {
-            LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
+            LinkedList<Piece> iaPieces = map.getIaPieces();
 
             for (Piece piece : iaPieces) {
-                int hasMoves = piece.checkValidMoves(checkersMap.getMap());
+                int hasMoves = piece.checkValidMoves(map.getMap());
 
                 if (hasMoves > 0) {
                     validPieces.add(piece);
                 }
             }
         } else {
-            LinkedList<Piece> playerPieces = checkersMap.getIaPieces();
+            LinkedList<Piece> playerPieces = map.getPlayerPieces();
 
             for (Piece piece : playerPieces) {
-                int hasMoves = piece.checkValidMoves(checkersMap.getMap());
+                int hasMoves = piece.checkValidMoves(map.getMap());
 
                 if (hasMoves > 0) {
                     validPieces.add(piece);
                 }
             }
         }
-
 
         return validPieces;
     }
@@ -104,6 +103,8 @@ public class CheckersIA {
         Piece p = null;
         // Get the valid pieces for the IA on the map passed by parameters
         LinkedList<Piece> validPieces = getValidPieces(checkersMap, true);
+        if (validPieces.size() == 0) return null;
+
         for (Piece iaPiece: validPieces) {
             // Per each valid pieces we will test every movement
             for (Movement movement: iaPiece.getValidMoves()) {
@@ -150,6 +151,8 @@ public class CheckersIA {
     private Movement getBestPlayerMovement(CheckersMap copyMap) {
         Movement bestPlayerMovement = null;
         LinkedList<Piece> playerPieces = getValidPieces(copyMap, false);
+        if (playerPieces.size() == 0) return null;
+
         for (Piece piece: playerPieces) {
             for (Movement movement: piece.getValidMoves()) {
                 movement.setScore(calculateMovementScore(false, movement, piece));
