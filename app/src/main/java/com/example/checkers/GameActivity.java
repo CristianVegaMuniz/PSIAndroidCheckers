@@ -46,6 +46,7 @@ public class GameActivity extends AppCompatActivity {
     private  CheckersIA ia;
 
     private int level = 0; // Easy = 0; Normal = 1; Hard = 2
+    private int depth = 1; // minimax depth
     private ScrollView logScroll;
 
     @Override
@@ -73,10 +74,12 @@ public class GameActivity extends AppCompatActivity {
         // If the LEVEL param not exists level will be a 0
         level = getIntent().getIntExtra("LEVEL", 0);
         System.out.println("The level selected is: " + level);
+        if (level == 2) depth = 3;
+        callIA();
     }
 
     private void callIA() {
-        Piece iaPiece = ia.moveIA(level, 0);
+        Piece iaPiece = ia.moveIA(level, depth);
         System.out.print("Called IA with level: " + level + ".");
         if (iaPiece != null) {
             System.out.print(" Will move: " + iaPiece.toString());
@@ -807,6 +810,5 @@ public class GameActivity extends AppCompatActivity {
         imageViews[7][6] = cell76;
         cell77 = findViewById(R.id.square_77);
         imageViews[7][7] = cell77;
-        callIA();
     }
 }

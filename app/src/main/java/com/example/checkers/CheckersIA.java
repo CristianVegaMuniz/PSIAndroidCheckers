@@ -18,7 +18,7 @@ public class CheckersIA {
                 piece = easyIA();
                 break;
             case 1:
-                piece = mediumIA();
+                piece = mediumIA(depth);
                 break;
             case 2:
                 piece = hardIA(depth);
@@ -28,30 +28,40 @@ public class CheckersIA {
         return piece;
     }
 
-    private LinkedList<Piece> getValidPieces() {
+    private LinkedList<Piece> getValidPieces(CheckersMap checkersMap, Boolean IA) {
         LinkedList<Piece> validPieces = new LinkedList<Piece>();
-        LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
+        if (IA) {
+            LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
 
-        for (Piece piece : iaPieces) {
-            int hasMoves = piece.checkValidMoves(checkersMap.getMap());
+            for (Piece piece : iaPieces) {
+                int hasMoves = piece.checkValidMoves(checkersMap.getMap());
 
-            if (hasMoves > 0) {
-                validPieces.add(piece);
+                if (hasMoves > 0) {
+                    validPieces.add(piece);
+                }
+            }
+        } else {
+            LinkedList<Piece> playerPieces = checkersMap.getIaPieces();
+
+            for (Piece piece : playerPieces) {
+                int hasMoves = piece.checkValidMoves(checkersMap.getMap());
+
+                if (hasMoves > 0) {
+                    validPieces.add(piece);
+                }
             }
         }
+
 
         return validPieces;
     }
 
     private Piece easyIA() {
-        LinkedList<Piece> validPieces = getValidPieces();
+        /*
+        LinkedList<Piece> validPieces = getValidPieces(checkersMap, true);
         Piece p = selectRandomPiece(validPieces);
-
-        return p;
-    }
-
-    private Piece mediumIA() {
-        LinkedList<Piece> validPieces = getValidPieces();
+        */
+        LinkedList<Piece> validPieces = getValidPieces(checkersMap, true);
         Piece p = null;
 
         for (Piece piece: validPieces) {
@@ -65,26 +75,97 @@ public class CheckersIA {
         return p;
     }
 
-    private Piece hardIA(int depth) {
-        Piece p = mediumIA();
-        /* MinMax */
-            // Take each valid iaPiece
-            // Set the score to each movement of each valid iaPiece
-            // Get the best movement and do it
+    private Piece mediumIA(int depth) {
+        /*
+        LinkedList<Piece> validPieces = getValidPieces(checkersMap, true);
+        Piece p = null;
 
-        /* Idea for MinMax with depth */
-            // Take each valid iaPiece
-            // Set the score to each movement of each valid iaPiece
-            // Try every movement (on a copy map)
-            // Get the best movement of the player (best response)
-            // Set the best response score
-            // triedMovementScore = triedMovementScore - bestResponseScore
-            // Repeat it recursively
-            // Get the best movement and do it
+        for (Piece piece: validPieces) {
+            if (piece.canEat()) p = piece;
+        }
+
+        if (p == null) {
+            p = selectRandomPiece(validPieces);
+        }
+        */
+
+        Piece p = minimax(depth, checkersMap);
+
         return p;
     }
 
-        private Piece selectRandomPiece(LinkedList<Piece> validPieces) {
+    private Piece hardIA(int depth) {
+        Piece p = minimax(depth, checkersMap);
+
+        return p;
+    }
+
+    private  Piece minimax(int depth, CheckersMap checkersMap) {
+        Piece p = null;
+        // Get the valid pieces for the IA on the map passed by parameters
+        LinkedList<Piece> validPieces = getValidPieces(checkersMap, true);
+        for (Piece iaPiece: validPieces) {
+            // Per each valid pieces we will test every movement
+            for (Movement movement: iaPiece.getValidMoves()) {
+                // Create copy objects of everything we will use
+                Piece testPiece = new Piece(iaPiece);
+                Movement testMovement = new Movement(movement);
+                CheckersMap testMap = new CheckersMap(checkersMap);
+
+                // We don't need the scores to move the piece
+                testPiece.setMovement(testMovement);
+                testMap.movePiece(testPiece);
+
+                // Now we tested the movement, lets set the score of it
+                movement.setScore(calculateMovementScore(true, movement, iaPiece));
+
+                // Now we look for the best player response, his best movement
+                Movement bestPlayerResponse = getBestPlayerMovement(testMap);
+
+                // If the player has a valid movement get the score and update our movement score
+                if (bestPlayerResponse != null) {
+                    bestPlayerResponse.setScore(calculateMovementScore(false, bestPlayerResponse, bestPlayerResponse.getPiece()));
+                    movement.setScore(movement.getScore() + bestPlayerResponse.getScore());
+                }
+
+                // Per each movement if depth > 1 we have to repeat the entire process for that map state
+                if (depth > 1) {
+                    Piece depthPiece = minimax(depth-1, testMap);
+
+                    // If on that sub-state we have some valid movement we add the score of it to our movement score
+                    if (depthPiece != null) {
+                        movement.setScore(movement.getScore() + depthPiece.getMovement().getScore());
+                    }
+                }
+            }
+            Collections.sort(iaPiece.getValidMoves());
+        }
+        Collections.sort(validPieces);
+        p = validPieces.getFirst();
+        p.setMovement(validPieces.getFirst().getValidMoves().getFirst());
+
+        return p;
+    }
+
+    private Movement getBestPlayerMovement(CheckersMap copyMap) {
+        Movement bestPlayerMovement = null;
+        LinkedList<Piece> playerPieces = getValidPieces(copyMap, false);
+        for (Piece piece: playerPieces) {
+            for (Movement movement: piece.getValidMoves()) {
+                movement.setScore(calculateMovementScore(false, movement, piece));
+            }
+            Collections.sort(piece.getValidMoves());
+        }
+        Collections.sort(playerPieces);
+
+        bestPlayerMovement = playerPieces.getFirst().getValidMoves().getFirst();
+        playerPieces.getFirst().setMovement(bestPlayerMovement);
+
+        return bestPlayerMovement;
+    }
+
+
+    private Piece selectRandomPiece(LinkedList<Piece> validPieces) {
         Piece selected = null;
 
         if (validPieces.size() > 0) {
@@ -101,5 +182,66 @@ public class CheckersIA {
         }
 
         return selected;
+    }
+
+    private int calculateMovementScore(Boolean max, Movement movement, Piece piece) {
+        int score = 0;
+
+        if (max) {
+            // Puntuación laterales (non poden comer)
+            if (movement.getGoY() == 0 || movement.getGoY() == 7) {
+                score += 4;
+            }
+            if (movement.getGoY() == 1 || movement.getGoY() == 6) {
+                score += 3;
+            }
+            if (movement.getGoY() == 2 || movement.getGoY() == 5) {
+                score += 2;
+            }
+            if (movement.getGoY() == 3 || movement.getGoY() == 4) {
+                score += 1;
+            }
+            // Puntuación coronar
+            if (movement.getGoX() == 7) {
+                // si xa e dama como o lateral
+                if (piece.isKing()) {
+                    score += 4;
+                } else {
+                    score += 6;
+                }
+            }
+            if (movement.isEatMovement()) {
+                score += 10;
+            }
+            return score;
+
+        } else {
+            // Puntuación laterales (non poden comer)
+            if (movement.getGoY() == 0 || movement.getGoY() == 7) {
+                score -= 4;
+            }
+            if (movement.getGoY() == 1 || movement.getGoY() == 6) {
+                score -= 3;
+            }
+            if (movement.getGoY() == 2 || movement.getGoY() == 5) {
+                score -= 2;
+            }
+            if (movement.getGoY() == 3 || movement.getGoY() == 4) {
+                score -= 1;
+            }
+            // Puntuación coronar
+            if (movement.getGoX() == 7) {
+                // si xa e dama como o lateral
+                if (piece.isKing()) {
+                    score -= 4;
+                } else {
+                    score -= 6;
+                }
+            }
+            if (movement.isEatMovement()) {
+                score -= 10;
+            }
+            return score;
+        }
     }
 }

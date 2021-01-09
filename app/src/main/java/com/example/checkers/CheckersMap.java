@@ -82,6 +82,55 @@ public class CheckersMap {
         return d;
     }
 
+    // Methods for the copy Map when minmax is called
+
+    void eatPiece(Piece eaten, Piece eater) {
+        for (int i = 0; i < map[0].length; i++)
+            for (int j = 0; j < map[1].length; j++)
+                if (map[i][j] != null) {
+                    if (map[i][j].getId() == eaten.getId()) {
+                        map[i][j] = null;
+                    }
+                }
+
+        if (eater.getType() == 1) {
+            iaPieces.remove(eaten);
+        } else {
+            playerPieces.remove(eaten);
+        }
+    }
+
+    boolean movePiece(Piece d) {
+        int x = d.getX();
+        int y = d.getY();
+
+        if (MoveChecker.checkMovement(d.getMovement(), map)) {
+            int nx = d.getMovement().getGoX();
+            int ny = d.getMovement().getGoY();
+            Piece movedPiece = map[x][y];
+
+            map[x][y] = null;
+            map[nx][ny] = movedPiece;
+
+            if ( (d.getType() == 1 && nx == 0) || (d.getType() == 2 && nx == 7) ) {
+                d.setKing(true);
+            }
+
+            d.setX(nx);
+            d.setY(ny);
+
+            if(d.getMovement().isEatMovement()) {
+                eatPiece(d.getMovement().getEatedPiece(), d);
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // ---------------------
+
     void eatPiece(Piece eaten, Piece eater, TextView tvScoreIa, TextView tvScorePlayer) {
         for (int i = 0; i < map[0].length; i++)
             for (int j = 0; j < map[1].length; j++)
@@ -107,6 +156,8 @@ public class CheckersMap {
         logs.setText(logMsg);
     }
 
+
+
     boolean movePiece(Piece d, ImageView[][] images, TextView tvScoreIa, TextView tvScorePlayer) {
         int x = d.getX();
         int y = d.getY();
@@ -114,6 +165,7 @@ public class CheckersMap {
         if (MoveChecker.checkMovement(d.getMovement(), map)) {
             int nx = d.getMovement().getGoX();
             int ny = d.getMovement().getGoY();
+            Piece movedPiece = map[x][y];
 
             String msg = "";
 
@@ -127,7 +179,7 @@ public class CheckersMap {
             logMsg += msg;
             logs.setText(logMsg);
             map[x][y] = null;
-            map[nx][ny] = d;
+            map[nx][ny] = movedPiece;
 
             if ( (d.getType() == 1 && nx == 0) || (d.getType() == 2 && nx == 7) ) {
                 d.setKing(true);

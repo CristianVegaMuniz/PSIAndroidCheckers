@@ -111,6 +111,8 @@ public class Movement implements Comparable<Movement> {
 
     public void setPiece(Piece piece) {
         this.piece = piece;
+        this.startX = piece.getX();
+        this.startY = piece.getY();
     }
 
     @Override
