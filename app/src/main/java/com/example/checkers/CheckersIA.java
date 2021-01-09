@@ -194,7 +194,9 @@ public class CheckersIA {
             }
         }
 
-        bestPlayerPiece.setMovement(bestPlayerMovement);
+        if (bestPlayerMovement != null) {
+            bestPlayerPiece.setMovement(bestPlayerMovement);
+        }
 
         return bestPlayerPiece;
     }
