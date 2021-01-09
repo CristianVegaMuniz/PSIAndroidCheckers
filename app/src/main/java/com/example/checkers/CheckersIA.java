@@ -221,11 +221,14 @@ public class CheckersIA {
             if (piece.isKing()) {
                 score += 4;
             } else {
-                score += 6;
+                score += 10;
             }
         } else {
-            if (!piece.isKing()) {
+            if (!piece.isKing() && piece.getType() == 2) {
                 score += movement.getGoX();
+            } else if (!piece.isKing() && piece.getType() == 1) {
+                score += (7 - movement.getGoX()) ;
+
             }
         }
 
@@ -246,10 +249,7 @@ public class CheckersIA {
         Piece tmpPiece = new Piece(piece);
         Movement tmpMovement = new Movement(movement);
         tmpPiece.setMovement(tmpMovement);
-
         tmpMap.movePiece(tmpPiece);
-
-
 
         if (piece.getType() == 2) {
             LinkedList<Piece> pieces = getValidPieces(tmpMap, false);
