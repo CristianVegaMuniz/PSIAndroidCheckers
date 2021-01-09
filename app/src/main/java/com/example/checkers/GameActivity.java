@@ -54,8 +54,6 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        ia = new CheckersIA(checkersMap);
-
         blackKing = getResources().getDrawable(R.drawable.black_king);
         blackPiece = getResources().getDrawable(R.drawable.black);
         whitePiece = getResources().getDrawable(R.drawable.white);
@@ -75,11 +73,13 @@ public class GameActivity extends AppCompatActivity {
         level = getIntent().getIntExtra("LEVEL", 0);
         System.out.println("The level selected is: " + level);
         if (level == 2) depth = 3;
+        ia = new CheckersIA(checkersMap, level, depth);
+
         callIA();
     }
 
     private void callIA() {
-        Piece iaPiece = ia.moveIA(level, depth);
+        Piece iaPiece = ia.moveIA();
         System.out.print("Called IA with level: " + level + ".");
         if (iaPiece != null) {
             System.out.print(" Will move: " + iaPiece.toString());
