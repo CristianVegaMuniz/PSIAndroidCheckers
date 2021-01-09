@@ -25,6 +25,7 @@ public class CheckersIA {
                 break;
         }
 
+        System.out.println("\nIA selected the movement: " + piece.getMovement().toString() + "\n");
         return piece;
     }
 
@@ -118,17 +119,20 @@ public class CheckersIA {
                 testMap.movePiece(testPiece);
 
                 // Now we tested the movement, lets set the score of it
-                movement.setScore(calculateMovementScore(true, movement, iaPiece));
+                movement.setScore(calculateMovementScore(movement, iaPiece, checkersMap));
                 System.out.println("DEPTH: " + depth + " - IA movement: " + movement.toString());
 
                 // Now we look for the best player response, his best movement
-                Movement bestPlayerResponse = getBestPlayerMovement(testMap);
+                Piece bestPlayerResponse = getBestPlayerResponse(testMap);
 
                 // If the player has a valid movement get the score and update our movement score
                 if (bestPlayerResponse != null) {
-                    bestPlayerResponse.setScore(calculateMovementScore(false, bestPlayerResponse, bestPlayerResponse.getPiece()));
-                    System.out.println("Best response movement: " + bestPlayerResponse.toString());
-                    movement.setScore(movement.getScore() + bestPlayerResponse.getScore());
+                    bestPlayerResponse.getMovement().setScore(calculateMovementScore(bestPlayerResponse.getMovement(), bestPlayerResponse, testMap));
+                    System.out.println("\tBest response movement: " + bestPlayerResponse.getMovement().toString());
+                    movement.setScore(movement.getScore() - bestPlayerResponse.getMovement().getScore());
+                    System.out.println("\tMovement updated: " + movement.toString());
+
+                    testMap.movePiece(bestPlayerResponse);
                 }
 
                 // Per each movement if depth > 1 we have to repeat the entire process for that map state
@@ -145,27 +149,28 @@ public class CheckersIA {
         }
         Collections.sort(validPieces);
         p = validPieces.getFirst();
-        p.setMovement(validPieces.getFirst().getValidMoves().getFirst());
+        p.setMovement(p.getValidMoves().getFirst());
 
         return p;
     }
 
-    private Movement getBestPlayerMovement(CheckersMap copyMap) {
-        Movement bestPlayerMovement = null;
+    private Piece getBestPlayerResponse(CheckersMap copyMap) {
+        Piece bestPlayerResponse = null;
         LinkedList<Piece> playerPieces = getValidPieces(copyMap, false);
         if (playerPieces.size() == 0) return null;
 
         for (Piece piece: playerPieces) {
             for (Movement movement: piece.getValidMoves()) {
-                movement.setScore(calculateMovementScore(false, movement, piece));
+                movement.setScore(calculateMovementScore(movement, piece, copyMap));
             }
             Collections.sort(piece.getValidMoves());
         }
         Collections.sort(playerPieces);
 
-        bestPlayerMovement = playerPieces.getLast().getValidMoves().getLast();
+        bestPlayerResponse = playerPieces.getFirst();
+        bestPlayerResponse.setMovement(bestPlayerResponse.getValidMoves().getFirst());
 
-        return bestPlayerMovement;
+        return bestPlayerResponse;
     }
 
 
@@ -188,71 +193,79 @@ public class CheckersIA {
         return selected;
     }
 
-    private int calculateMovementScore(Boolean max, Movement movement, Piece piece) {
+    private int calculateMovementScore(Movement movement, Piece piece, CheckersMap map) {
         int score = 0;
-
-        if (max) {
-            // Puntuación laterales (non poden comer)
-            if (movement.getGoY() == 0 || movement.getGoY() == 7) {
-                score += 4;
-            }
-            if (movement.getGoY() == 1 || movement.getGoY() == 6) {
-                score += 3;
-            }
-            if (movement.getGoY() == 2 || movement.getGoY() == 5) {
-                score += 2;
-            }
-            if (movement.getGoY() == 3 || movement.getGoY() == 4) {
-                score += 1;
-            }
-            // Puntuación coronar
-            if (movement.getGoX() == 7) {
-                // si xa e dama como o lateral
-                if (piece.isKing()) {
-                    score += 4;
-                } else {
-                    score += 6;
-                }
-            }
-            if (movement.isEatMovement()) {
-                score += 10;
-                if (movement.getEatedPiece().isKing()) {
-                    score += 5;
-                }
-            }
-
-            return score;
-        } else {
-            // Puntuación laterales (non poden comer)
-            if (movement.getGoY() == 0 || movement.getGoY() == 7) {
-                score -= 4;
-            }
-            if (movement.getGoY() == 1 || movement.getGoY() == 6) {
-                score -= 3;
-            }
-            if (movement.getGoY() == 2 || movement.getGoY() == 5) {
-                score -= 2;
-            }
-            if (movement.getGoY() == 3 || movement.getGoY() == 4) {
-                score -= 1;
-            }
-            // Puntuación coronar
-            if (movement.getGoX() == 7) {
-                // si xa e dama como o lateral
-                if (piece.isKing()) {
-                    score -= 4;
-                } else {
-                    score -= 6;
-                }
-            }
-            if (movement.isEatMovement()) {
-                score -= 10;
-                if (movement.getEatedPiece().isKing()) {
-                    score -= 5;
-                }
-            }
-
-            return score;
+        if (willBeEatable(movement, piece, map)) {
+            score -= 10;
         }
+
+        // Puntuación laterales (non poden comer)
+        if (movement.getGoY() == 0 || movement.getGoY() == 7) {
+            score += 4;
+        }
+        if (movement.getGoY() == 1 || movement.getGoY() == 6) {
+            score += 3;
+        }
+        if (movement.getGoY() == 2 || movement.getGoY() == 5) {
+            score += 2;
+        }
+        if (movement.getGoY() == 3 || movement.getGoY() == 4) {
+            score += 1;
+        }
+        // Puntuación coronar
+        if (movement.getGoX() == 7) {
+            // si xa e dama como o lateral
+            if (piece.isKing()) {
+                score += 4;
+            } else {
+                score += 6;
+            }
+        }
+        if (movement.isEatMovement()) {
+            score += 10;
+            if (movement.getEatedPiece().isKing()) {
+                score += 5;
+            }
+        }
+
+        return score;
+    }
+
+    private boolean willBeEatable(Movement movement, Piece piece, CheckersMap map) {
+        if(piece == null) return false;
+
+        CheckersMap tmpMap = new CheckersMap(map);
+        Piece tmpPiece = new Piece(piece);
+        Movement tmpMovement = new Movement(movement);
+        tmpPiece.setMovement(tmpMovement);
+
+        tmpMap.movePiece(tmpPiece);
+
+
+
+        if (piece.getType() == 2) {
+            LinkedList<Piece> pieces = getValidPieces(tmpMap, false);
+            for (Piece p: pieces) {
+                for (Movement m: p.getValidMoves()) {
+                    if (m.isEatMovement()) {
+                        if (m.getEatedPiece().getId() == piece.getId()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        } else {
+            LinkedList<Piece> pieces = getValidPieces(tmpMap, true);
+            for (Piece p: pieces) {
+                for (Movement m: p.getValidMoves()) {
+                    if (m.isEatMovement()) {
+                        if (m.getEatedPiece().getId() == piece.getId()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

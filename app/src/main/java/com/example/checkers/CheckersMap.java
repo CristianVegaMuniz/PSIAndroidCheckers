@@ -89,6 +89,7 @@ public class CheckersMap {
             for (int j = 0; j < map[1].length; j++)
                 if (map[i][j] != null) {
                     if (map[i][j].getId() == eaten.getId()) {
+                        eaten = map[i][j];
                         map[i][j] = null;
                     }
                 }
@@ -116,8 +117,8 @@ public class CheckersMap {
                 d.setKing(true);
             }
 
-            d.setX(nx);
-            d.setY(ny);
+            movedPiece.setX(nx);
+            movedPiece.setY(ny);
 
             if(d.getMovement().isEatMovement()) {
                 eatPiece(d.getMovement().getEatedPiece(), d);
@@ -185,8 +186,8 @@ public class CheckersMap {
                 d.setKing(true);
             }
 
-            d.setX(nx);
-            d.setY(ny);
+            movedPiece.setX(nx);
+            movedPiece.setY(ny);
 
             if(d.getMovement().isEatMovement()) {
                 images[d.getMovement().getEatedPiece().getX()][d.getMovement().getEatedPiece().getY()].setImageDrawable(null);
