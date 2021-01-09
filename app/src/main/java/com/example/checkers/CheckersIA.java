@@ -119,6 +119,7 @@ public class CheckersIA {
 
                 // Now we tested the movement, lets set the score of it
                 movement.setScore(calculateMovementScore(true, movement, iaPiece));
+                System.out.println("DEPTH: " + depth + " - IA movement: " + movement.toString());
 
                 // Now we look for the best player response, his best movement
                 Movement bestPlayerResponse = getBestPlayerMovement(testMap);
@@ -126,6 +127,7 @@ public class CheckersIA {
                 // If the player has a valid movement get the score and update our movement score
                 if (bestPlayerResponse != null) {
                     bestPlayerResponse.setScore(calculateMovementScore(false, bestPlayerResponse, bestPlayerResponse.getPiece()));
+                    System.out.println("Best response movement: " + bestPlayerResponse.toString());
                     movement.setScore(movement.getScore() + bestPlayerResponse.getScore());
                 }
 
@@ -161,8 +163,7 @@ public class CheckersIA {
         }
         Collections.sort(playerPieces);
 
-        bestPlayerMovement = playerPieces.getFirst().getValidMoves().getFirst();
-        playerPieces.getFirst().setMovement(bestPlayerMovement);
+        bestPlayerMovement = playerPieces.getLast().getValidMoves().getLast();
 
         return bestPlayerMovement;
     }
@@ -215,9 +216,12 @@ public class CheckersIA {
             }
             if (movement.isEatMovement()) {
                 score += 10;
+                if (movement.getEatedPiece().isKing()) {
+                    score += 5;
+                }
             }
-            return score;
 
+            return score;
         } else {
             // Puntuación laterales (non poden comer)
             if (movement.getGoY() == 0 || movement.getGoY() == 7) {
@@ -243,7 +247,11 @@ public class CheckersIA {
             }
             if (movement.isEatMovement()) {
                 score -= 10;
+                if (movement.getEatedPiece().isKing()) {
+                    score -= 5;
+                }
             }
+
             return score;
         }
     }

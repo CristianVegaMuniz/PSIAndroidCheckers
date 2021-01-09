@@ -126,5 +126,10 @@ public class Movement implements Comparable<Movement> {
         }
     }
 
+    @Override
+    public String toString() {
+        return "From: " + this.piece.getX() + "-" + this.piece.getY() + " To: " + this.goX + "-" + this.goY + " Score: " + this.score;
+    }
+
 }
 
