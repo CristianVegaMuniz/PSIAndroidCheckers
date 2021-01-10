@@ -23,14 +23,22 @@ public class MainActivity extends AppCompatActivity {
         cbBlacks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cbWhites.isChecked()) cbWhites.setChecked(false);
+                if (cbWhites.isChecked()){
+                    cbWhites.setChecked(false);
+                } else {
+                    cbBlacks.setChecked(true);
+                }
             }
         });
 
         cbWhites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cbBlacks.isChecked()) cbBlacks.setChecked(false);
+                if (cbBlacks.isChecked()){
+                    cbBlacks.setChecked(false);
+                } else {
+                    cbWhites.setChecked(true);
+                }
             }
         });
     }
