@@ -146,18 +146,19 @@ public class CheckersIA {
                         //System.out.println("\tMovement updated: " + movement.toString());
 
                         testMap.movePiece(bestPlayerResponse);
-                    } else {
-                        movement.setScore(movement.getScore() + 50);
-                    }
 
-                    // Per each movement if depth > 1 we have to repeat the entire process for that map state
-                    if (depth > 1) {
-                        Piece depthPiece = minimax(depth-1, testMap);
+                        // Per each movement if depth > 1 we have to repeat the entire process for that map state
+                        if (depth > 1) {
+                            Piece depthPiece = minimax(depth-1, testMap);
 
-                        // If on that sub-state we have some valid movement we add the score of it to our movement score
-                        if (depthPiece != null) {
-                            movement.setScore(movement.getScore() + depthPiece.getMovement().getScore());
+                            // If on that sub-state we have some valid movement we add the score of it to our movement score
+                            if (depthPiece != null) {
+                                movement.setScore(movement.getScore() + depthPiece.getMovement().getScore());
+                            }
                         }
+
+                    } else {
+                        movement.setScore(movement.getScore() + 100*depth);
                     }
 
                     if (bestMovement == null || bestMovement.getScore() < movement.getScore()) {
