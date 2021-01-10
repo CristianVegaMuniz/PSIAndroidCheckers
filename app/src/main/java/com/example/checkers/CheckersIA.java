@@ -33,10 +33,6 @@ public class CheckersIA {
                 break;
         }
 
-        if (piece != null) {
-            System.out.println("\nIA selected the movement: " + piece.getMovement().toString() + "\n");
-        }
-
         return piece;
     }
 

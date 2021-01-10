@@ -26,7 +26,7 @@ public class GameActivity extends AppCompatActivity {
 
     private ImageView[][] imageViews = new ImageView[8][8];
 
-    private TextView scorePlayer, scoreIa;
+    private TextView scorePlayer, scoreIa, logs;
 
     private Drawable blackPiece;
     private Drawable blackKing;
@@ -78,9 +78,15 @@ public class GameActivity extends AppCompatActivity {
     private void callIA() {
         Piece iaPiece = ia.moveIA();
         if (iaPiece != null) {
+            String logMsg = checkersMap.getLogMsg() + "\n  -> IA selected the movement: " + iaPiece.getMovement().toString();
+            checkersMap.setLogMsg(logMsg);
+            logs.setText(logMsg);
+
             deletePiece(iaPiece.getX(), iaPiece.getY());
             checkersMap.movePiece(iaPiece, imageViews, scoreIa, scorePlayer);
             drawPiece(iaPiece);
+
+            autoScroll();
         }
 
         checkEndGame(true);
@@ -695,7 +701,7 @@ public class GameActivity extends AppCompatActivity {
         scorePlayer = findViewById(R.id.scorePlayer);
         scoreIa = findViewById(R.id.scoreIA);
 
-        TextView logs = findViewById(R.id.tvLogs);
+        logs = findViewById(R.id.tvLogs);
         checkersMap.setLogs(logs);
 
         cell00 = findViewById(R.id.square_00);
