@@ -158,7 +158,9 @@ public class CheckersIA {
                         }
 
                     } else {
-                        movement.setScore(movement.getScore() + 100*depth);
+                        if (testMap.getPlayerPieces().isEmpty()) {
+                            movement.setScore(movement.getScore() + 100*depth);
+                        }
                     }
 
                     if (bestMovement == null || bestMovement.getScore() < movement.getScore()) {
@@ -254,10 +256,8 @@ public class CheckersIA {
                 score += 10;
             }
         } else {
-            if (!piece.isKing() && piece.getType() == 2) {
-                score += movement.getGoX();
-            } else if (!piece.isKing() && piece.getType() == 1) {
-                score += (7 - movement.getGoX());
+            if (!piece.isKing()) {
+                score += 2;
             }
         }
 
