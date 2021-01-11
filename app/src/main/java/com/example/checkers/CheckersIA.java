@@ -1,15 +1,12 @@
 package com.example.checkers;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.widget.ImageView;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
 public class CheckersIA {
     private CheckersMap checkersMap = null;
+    private  GameActivity gameActivity = null;
     private int level = 0;
     private int depth = 1;
 
@@ -115,9 +112,10 @@ public class CheckersIA {
 
         for (Piece iaPiece: iaPieces) {
             // Per each valid pieces we will test every movement
-            iaPiece.checkValidMoves(checkersMap.getMap());
+            int hasMoves = iaPiece.checkValidMoves(checkersMap.getMap());
 
             for (Movement movement: iaPiece.getValidMoves()) {
+                if (hasMoves == 2 && !movement.isEatMovement()) continue;
                 // Create copy objects of everything we will use
                 Piece testPiece = new Piece(iaPiece);
                 Movement testMovement = new Movement(movement);
@@ -187,8 +185,9 @@ public class CheckersIA {
         LinkedList<Piece> playerPieces = copyMap.getPlayerPieces();
 
         for (Piece piece : playerPieces) {
-            piece.checkValidMoves(copyMap.getMap());
+            int hasMoves = piece.checkValidMoves(copyMap.getMap());
             for (Movement movement: piece.getValidMoves()) {
+                if (hasMoves == 2 && !movement.isEatMovement()) continue;
                 movement.setScore(calculateMovementScore(movement, piece, copyMap));
 
                 if (bestPlayerMovement == null || bestPlayerMovement.getScore() < movement.getScore()) {
@@ -271,12 +270,12 @@ public class CheckersIA {
             if (!eatable) {
                 score += 50;
                 if (movement.getEatedPiece().isKing()) {
-                    score += 10;
+                    score += 20;
                 }
             } else {
-                score += 10;
+                score += 30;
                 if (movement.getEatedPiece().isKing()) {
-                    score += 10;
+                    score += 20;
                 }
             }
         }
@@ -292,30 +291,26 @@ public class CheckersIA {
         Movement tmpMovement = new Movement(movement);
         tmpPiece.setMovement(tmpMovement);
         tmpMap.movePiece(tmpPiece);
+        LinkedList<Piece> pieces = null;
 
         if (piece.getType() == 2) {
-            LinkedList<Piece> pieces = getValidPieces(tmpMap, false);
-            for (Piece p: pieces) {
-                for (Movement m: p.getValidMoves()) {
-                    if (m.isEatMovement()) {
-                        if (m.getEatedPiece().getId() == piece.getId()) {
-                            return true;
-                        }
-                    }
-                }
-            }
+            pieces = tmpMap.getPlayerPieces();
         } else {
-            LinkedList<Piece> pieces = getValidPieces(tmpMap, true);
-            for (Piece p: pieces) {
-                for (Movement m: p.getValidMoves()) {
-                    if (m.isEatMovement()) {
-                        if (m.getEatedPiece().getId() == piece.getId()) {
-                            return true;
-                        }
+            pieces = tmpMap.getIaPieces();
+        }
+        for (Piece p: pieces) {
+            int hasMoves = piece.checkValidMoves(tmpMap.getMap());
+            if (hasMoves != 2) continue;
+            for (Movement m: p.getValidMoves()) {
+                if (hasMoves == 2 && !movement.isEatMovement()) continue;
+                if (m.isEatMovement()) {
+                    if (m.getEatedPiece().getId() == piece.getId()) {
+                        return true;
                     }
                 }
             }
         }
+
         return false;
     }
 }

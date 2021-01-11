@@ -12,18 +12,26 @@
 
         <TextView
             android:id="@+id/scoreIA"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ia_score"
             android:textStyle="bold"
             android:background="@color/background3"
             android:textColor="@color/black"
             android:textSize="30sp"
-            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"/>
+
+        <ImageView
+            android:id="@+id/ia_think"
+            android:layout_marginTop="2dp"
+            android:layout_width="55sp"
+            android:layout_height="55sp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/thinking"/>
 
         <LinearLayout
             android:id="@+id/linearLayout"

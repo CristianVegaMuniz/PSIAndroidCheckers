@@ -23,9 +23,9 @@ public class GameActivity extends AppCompatActivity {
     private ImageView cell50, cell51, cell52, cell53, cell54, cell55, cell56, cell57;
     private ImageView cell60, cell61, cell62, cell63, cell64, cell65, cell66, cell67;
     private ImageView cell70, cell71, cell72, cell73, cell74, cell75, cell76, cell77;
-
     private ImageView[][] imageViews = new ImageView[8][8];
 
+    private ImageView iaThinking;
     private TextView scorePlayer, scoreIa, logs;
 
     private Drawable blackPiece;
@@ -39,11 +39,13 @@ public class GameActivity extends AppCompatActivity {
 
     private final CheckersMap checkersMap = new CheckersMap();
     private final Player player = new Player();
-    private  CheckersIA ia;
+    private CheckersIA ia;
 
-    private boolean playerWhites = false;
     private int level = 0; // Easy = 0; Normal = 1; Hard = 2
     private int depth = 1; // minimax depth
+
+    private boolean playerWhites = false;
+    private boolean waitingForIA = false;
     private ScrollView logScroll;
 
     @Override
@@ -66,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
         init();
         setClickListeners();
 
-        if (level == 2) depth = 3;
+        if (level == 2) depth = 5;
         System.out.println("The level selected is: " + level + " with depth: " + depth);
         ia = new CheckersIA(checkersMap, level, depth);
 
@@ -75,8 +77,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void callIA() {
-        Piece iaPiece = ia.moveIA();
+    public void handlerIA(Piece iaPiece) {
         if (iaPiece != null) {
             String logMsg = checkersMap.getLogMsg() + "\n  -> IA selected the movement: " + iaPiece.getMovement().toString();
             checkersMap.setLogMsg(logMsg);
@@ -85,12 +86,31 @@ public class GameActivity extends AppCompatActivity {
             deletePiece(iaPiece.getX(), iaPiece.getY());
             checkersMap.movePiece(iaPiece, imageViews, scoreIa, scorePlayer);
             drawPiece(iaPiece);
-
-            autoScroll();
         }
 
         checkEndGame(true);
         autoScroll();
+        iaThinking.setVisibility(View.INVISIBLE);
+        waitingForIA = false;
+    }
+
+    private void callIA() {
+        waitingForIA = true;
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Piece iaPiece = ia.moveIA();
+                        handlerIA(iaPiece);
+                    }
+                });
+            }
+        };
+        thread.start();
+        iaThinking.setVisibility(View.VISIBLE);
     }
 
     private void autoScroll() {
@@ -209,6 +229,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void playerClick(ImageView cell, int selX, int selY) {
+        if (waitingForIA) return;
         if (player.getSelectedPiece() == null) {
             player.setSelectedPiece(checkersMap.getPlayerPiece(selX,selY));
             if (player.getSelectedPiece() != null) {
@@ -229,11 +250,9 @@ public class GameActivity extends AppCompatActivity {
 
             if (moved) {
                 deletePiece(x,y);
-                x = selected.getX();
-                y = selected.getY();
-
                 drawPiece(selected);
                 checkEndGame(false);
+
                 callIA();
             }
 
@@ -692,6 +711,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void init() {
+        iaThinking = findViewById(R.id.ia_think);
+
         green = getResources().getColor(R.color.green);
         background_blacks = getResources().getColor(R.color.background1);
         blue = getResources().getColor(R.color.purple_700);
