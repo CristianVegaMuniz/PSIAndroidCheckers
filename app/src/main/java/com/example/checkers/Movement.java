@@ -40,10 +40,6 @@ public class Movement implements Comparable<Movement> {
         this.piece = null;
     }
 
-    public void debug() {
-        System.out.println("Will move to: " + goX + "-" + goY);
-    }
-
     public Piece getEatedPiece() {
         return eatedPiece;
     }
@@ -128,7 +124,7 @@ public class Movement implements Comparable<Movement> {
 
     @Override
     public String toString() {
-        return "From: " + this.piece.getX() + "-" + this.piece.getY() + " To: " + this.goX + "-" + this.goY + " Score: " + this.score;
+        return "From: " + this.startX + "-" + this.startY + " To: " + this.goX + "-" + this.goY + " Score: " + this.score;
     }
 
 }

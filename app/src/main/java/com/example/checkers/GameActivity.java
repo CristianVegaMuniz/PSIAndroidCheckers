@@ -42,7 +42,7 @@ public class GameActivity extends AppCompatActivity {
     private CheckersIA ia;
 
     private int level = 0; // Easy = 0; Normal = 1; Hard = 2
-    private int depth = 1; // minimax depth
+    private int depth = 2; // minimax depth
 
     private boolean playerWhites = false;
     private boolean waitingForIA = false;
@@ -69,7 +69,7 @@ public class GameActivity extends AppCompatActivity {
         setClickListeners();
 
         if (level == 2) depth = 5;
-        System.out.println("The level selected is: " + level + " with depth: " + depth);
+        System.out.println("[IA] The level selected is: " + level + " with depth: " + depth);
         ia = new CheckersIA(checkersMap, level, depth);
 
         if (!playerWhites) {
@@ -79,6 +79,7 @@ public class GameActivity extends AppCompatActivity {
 
     public void handlerIA(Piece iaPiece) {
         if (iaPiece != null) {
+            System.out.println("[IA] Selected the movement: " + iaPiece.getMovement().toString());
             String logMsg = checkersMap.getLogMsg() + "\n  -> IA selected the movement: " + iaPiece.getMovement().toString();
             checkersMap.setLogMsg(logMsg);
             logs.setText(logMsg);
@@ -249,6 +250,13 @@ public class GameActivity extends AppCompatActivity {
             removeValidMoves(selected);
 
             if (moved) {
+                selected.getMovement().setScore(ia.calculateMovementScore(selected, checkersMap));
+                String msg = checkersMap.getLogMsg() + "\n  -> PL selected the movement: " + selected.getMovement().getStartX() + "-"
+                        + selected.getMovement().getStartY() + " To: " + selected.getMovement().getGoX() + "-" + selected.getMovement().getGoY();
+                checkersMap.setLogMsg(msg);
+                logs.setText(msg);
+                autoScroll();
+
                 deletePiece(x,y);
                 drawPiece(selected);
                 checkEndGame(false);

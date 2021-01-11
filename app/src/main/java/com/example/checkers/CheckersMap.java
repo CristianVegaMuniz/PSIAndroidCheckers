@@ -150,19 +150,17 @@ public class CheckersMap {
                 }
 
         if (eater.getType() == 1) {
-            //System.out.println("\tThe Player eated an IAPiece on ["+ eaten.getX() + "," + eaten.getY() + "]");
-            logMsg += "\n  -> EAT: The Player eated an IAPiece on ["+ eaten.getX() + "," + eaten.getY() + "]\n";
             scorePlayer++;
             tvScorePlayer.setText("Player Score: " + scorePlayer);
             iaPieces.remove(eaten);
         } else {
-            //System.out.println("\tThe IA eated a PlayerPiece on ["+ eaten.getX() + "," + eaten.getY() + "]");
-            logMsg += "\n  -> EAT -> The IA eated a PlayerPiece on ["+ eaten.getX() + "," + eaten.getY() + "]\n";
+            logMsg += "\n  -> The IA eated a PlayerPiece. " + eaten.toString() + "\n";
+            logs.setText(logMsg);
+
             scoreIA++;
             tvScoreIa.setText("IA Score: " + scoreIA);
             playerPieces.remove(eaten);
         }
-        logs.setText(logMsg);
     }
 
 
@@ -176,15 +174,6 @@ public class CheckersMap {
             int ny = d.getMovement().getGoY();
             Piece movedPiece = map[x][y];
 
-            String msg = "";
-
-            if (d.getType() == 1) {
-                msg = "\n  -> Map will move a playerPiece from [" + x + "," + y + "] to [" + nx + "," + ny + "]";
-            }
-
-            //System.out.println(msg);
-            logMsg += msg;
-            logs.setText(logMsg);
             map[x][y] = null;
             map[nx][ny] = movedPiece;
 
@@ -202,7 +191,6 @@ public class CheckersMap {
 
             return true;
         } else {
-            //System.out.println("Wrong move. Try again!");
             return false;
         }
     }

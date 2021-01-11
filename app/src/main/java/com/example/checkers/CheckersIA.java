@@ -6,9 +6,10 @@ import java.util.Random;
 
 public class CheckersIA {
     private CheckersMap checkersMap = null;
-    private  GameActivity gameActivity = null;
     private int level = 0;
     private int depth = 1;
+    public static boolean IA = true;
+    public static boolean PLAYER = false;
 
     CheckersIA(CheckersMap map, int level, int depth) {
         this.checkersMap = map;
@@ -93,62 +94,61 @@ public class CheckersIA {
         }
         */
 
-        Piece p = minimax(depth, checkersMap);
+        Piece p = minimax(depth, checkersMap, CheckersIA.IA);
 
         return p;
     }
 
     private Piece hardIA(int depth) {
-        Piece p = minimax(depth, checkersMap);
+        Piece p = minimax(depth, checkersMap, CheckersIA.IA);
 
         return p;
     }
 
-    private  Piece minimax(int depth, CheckersMap checkersMap) {
-        Piece p = null;
+    private  Piece minimax(int depth, CheckersMap checkersMap, boolean IA) {
+        Piece bestPiece = null;
         Movement bestMovement = null;
         // Get the valid pieces for the IA on the map passed by parameters
-        LinkedList<Piece> iaPieces = checkersMap.getIaPieces();
+        LinkedList<Piece> pieces = null;
 
-        for (Piece iaPiece: iaPieces) {
+        if (IA) {
+            pieces = checkersMap.getIaPieces();
+        } else {
+            pieces = checkersMap.getPlayerPieces();
+        }
+
+        for (Piece piece: pieces) {
             // Per each valid pieces we will test every movement
-            int hasMoves = iaPiece.checkValidMoves(checkersMap.getMap());
+            int hasMoves = piece.checkValidMoves(checkersMap.getMap());
 
-            for (Movement movement: iaPiece.getValidMoves()) {
+            for (Movement movement: piece.getValidMoves()) {
                 if (hasMoves == 2 && !movement.isEatMovement()) continue;
                 // Create copy objects of everything we will use
-                Piece testPiece = new Piece(iaPiece);
-                Movement testMovement = new Movement(movement);
                 CheckersMap testMap = new CheckersMap(checkersMap);
 
                 // We don't need the scores to move the piece
-                testPiece.setMovement(testMovement);
-                testMap.movePiece(testPiece);
+                piece.setMovement(movement);
+                // The CheckersMap will move the real piece of the map by ID.
+                // The Object piece and his movement will stay as now (dont need copy)
+                testMap.movePiece(piece);
 
                 // Now we tested the movement, lets set the score of it
-                movement.setScore(calculateMovementScore(movement, iaPiece, checkersMap));
-                //System.out.println("DEPTH: " + depth + " - IA movement to check: " + movement.toString());
+                movement.setScore(calculateMovementScore(piece, testMap));
 
                 // Now we look for the best player response, his best movement
                 Piece bestPlayerResponse = getBestPlayerResponse(testMap);
 
                 // If the player has a valid movement get the score and update our movement score
                 if (bestPlayerResponse != null) {
-                    //System.out.println("\tRESPONSE DEPTH: " + depth + " - Best response movement: " + bestPlayerResponse.getMovement().toString());
                     movement.setScore(movement.getScore() - bestPlayerResponse.getMovement().getScore());
-                    //System.out.println("\tMovement updated: " + movement.toString());
-
                     testMap.movePiece(bestPlayerResponse);
-
-                    //System.out.println("\tPRE DEPTH: " + depth + " - IA movement before go deeper: " + movement.toString());
 
                     // Per each movement if depth > 1 we have to repeat the entire process for that map state
                     if (depth > 1) {
-                        Piece depthPiece = minimax(depth-1, testMap);
+                        Piece depthPiece = minimax(depth-1, testMap, CheckersIA.IA);
 
                         // If on that sub-state we have some valid movement we add the score of it to our movement score
                         if (depthPiece != null) {
-                            //System.out.println("\tDEEP DEPTH: " + depth + " - IA depth movement : " + depthPiece.getMovement().toString());
                             movement.setScore(movement.getScore() + depthPiece.getMovement().getScore());
                         } else {
                             // If we dont have any response to the best player response we lose
@@ -161,22 +161,32 @@ public class CheckersIA {
                     // 100 points for that winning movement * depth
                     if (testMap.getPlayerPieces().isEmpty()) {
                         movement.setScore(movement.getScore() + 100*depth);
+                        bestPiece = piece;
+                        bestPiece.setMovement(movement);
+
+                        return bestPiece;
                     }
                 }
-                //System.out.println("\tFINAL DEPTH: " + depth + " - IA movement after go deeper: " + movement.toString());
+
+                if (movement.getScore() > 200){
+                    bestPiece = piece;
+                    bestPiece.setMovement(movement);
+
+                    return bestPiece;
+                }
 
                 if (bestMovement == null || bestMovement.getScore() < movement.getScore()) {
                     bestMovement = movement;
-                    p = iaPiece;
+                    bestPiece = piece;
                 }
             }
         }
 
-        if (p != null) {
-            p.setMovement(bestMovement);
+        if (bestPiece != null) {
+            bestPiece.setMovement(bestMovement);
         }
 
-        return p;
+        return bestPiece;
     }
 
     private Piece getBestPlayerResponse(CheckersMap copyMap) {
@@ -188,7 +198,11 @@ public class CheckersIA {
             int hasMoves = piece.checkValidMoves(copyMap.getMap());
             for (Movement movement: piece.getValidMoves()) {
                 if (hasMoves == 2 && !movement.isEatMovement()) continue;
-                movement.setScore(calculateMovementScore(movement, piece, copyMap));
+                CheckersMap tmpMap = new CheckersMap(copyMap);
+                piece.setMovement(movement);
+
+                tmpMap.movePiece(piece);
+                movement.setScore(calculateMovementScore(piece, tmpMap));
 
                 if (bestPlayerMovement == null || bestPlayerMovement.getScore() < movement.getScore()) {
                     bestPlayerMovement = movement;
@@ -224,9 +238,11 @@ public class CheckersIA {
         return selected;
     }
 
-    private int calculateMovementScore(Movement movement, Piece piece, CheckersMap map) {
+    /* Needs to be called after moved the piece */
+    public int calculateMovementScore(Piece piece, CheckersMap map) {
+        Movement movement = piece.getMovement();
+        boolean eatable = isEatable(piece, map);
         int score = 0;
-        boolean eatable = willBeEatable(movement, piece, map);
 
         if (eatable) {
             // Si la pieza no esta segura -10 puntos
@@ -268,12 +284,12 @@ public class CheckersIA {
         // Si se come una dama coronada mas recompensa
         if (movement.isEatMovement()) {
             if (!eatable) {
-                score += 50;
+                score += 20;
                 if (movement.getEatedPiece().isKing()) {
                     score += 20;
                 }
             } else {
-                score += 30;
+                score += 10;
                 if (movement.getEatedPiece().isKing()) {
                     score += 20;
                 }
@@ -283,26 +299,21 @@ public class CheckersIA {
         return score;
     }
 
-    private boolean willBeEatable(Movement movement, Piece piece, CheckersMap map) {
+    private boolean isEatable(Piece piece, CheckersMap map) {
         if(piece == null) return false;
 
-        CheckersMap tmpMap = new CheckersMap(map);
-        Piece tmpPiece = new Piece(piece);
-        Movement tmpMovement = new Movement(movement);
-        tmpPiece.setMovement(tmpMovement);
-        tmpMap.movePiece(tmpPiece);
         LinkedList<Piece> pieces = null;
 
         if (piece.getType() == 2) {
-            pieces = tmpMap.getPlayerPieces();
+            pieces = map.getPlayerPieces();
         } else {
-            pieces = tmpMap.getIaPieces();
+            pieces = map.getIaPieces();
         }
         for (Piece p: pieces) {
-            int hasMoves = piece.checkValidMoves(tmpMap.getMap());
+            int hasMoves = piece.checkValidMoves(map.getMap());
             if (hasMoves != 2) continue;
             for (Movement m: p.getValidMoves()) {
-                if (hasMoves == 2 && !movement.isEatMovement()) continue;
+                if (!m.isEatMovement()) continue;
                 if (m.isEatMovement()) {
                     if (m.getEatedPiece().getId() == piece.getId()) {
                         return true;
