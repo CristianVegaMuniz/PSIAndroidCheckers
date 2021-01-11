@@ -122,7 +122,7 @@ public class CheckersMap {
             map[nx][ny] = movedPiece;
 
             if ( (d.getType() == 1 && nx == 0) || (d.getType() == 2 && nx == 7) ) {
-                d.setKing(true);
+                movedPiece.setKing(true);
             }
 
             movedPiece.setX(nx);
@@ -178,7 +178,7 @@ public class CheckersMap {
             map[nx][ny] = movedPiece;
 
             if ( (d.getType() == 1 && nx == 0) || (d.getType() == 2 && nx == 7) ) {
-                d.setKing(true);
+                movedPiece.setKing(true);
             }
 
             movedPiece.setX(nx);
