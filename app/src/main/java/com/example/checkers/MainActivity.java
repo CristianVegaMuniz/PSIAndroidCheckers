@@ -76,14 +76,18 @@ public class MainActivity extends AppCompatActivity {
     public void PlayCustom(View view){
         Intent playActivity = new Intent(this, GameActivity.class);
         EditText edittext = (EditText) findViewById(R.id.number);
-        int depth = Integer.parseInt(edittext.getText().toString());
-
-        playActivity.putExtra("LEVEL", custom);
-        playActivity.putExtra("DEPTH", depth);
-        if (cbWhites.isChecked()) {
-            playActivity.putExtra("WHITES", true);
+        int depth;
+        try {
+            depth = Integer.parseInt(edittext.getText().toString());
+            playActivity.putExtra("LEVEL", custom);
+            playActivity.putExtra("DEPTH", depth);
+            if (cbWhites.isChecked()) {
+                playActivity.putExtra("WHITES", true);
+            }
+            startActivity(playActivity);
+        } catch (Exception e) {
         }
-        startActivity(playActivity);
+
     }
 
 }
