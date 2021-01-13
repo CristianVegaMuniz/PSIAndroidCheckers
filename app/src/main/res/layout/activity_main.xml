@@ -30,20 +30,19 @@
 
             <Button
                 android:id="@+id/easyBtn"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_width="180dp"
+                android:layout_width="160dp"
                 android:layout_height="80dp"
                 android:textSize="15sp"
+                android:layout_marginRight="10dp"
                 android:onClick="PlayEasy"
                 android:text="@string/start_easy_game"/>
 
             <Button
                 android:id="@+id/normalBtn"
-                android:layout_below="@id/easyBtn"
+                android:layout_toRightOf="@id/easyBtn"
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
-                android:layout_width="180dp"
+                android:layout_width="160dp"
                 android:layout_height="80dp"
                 android:textSize="15sp"
                 android:onClick="PlayNormal"
@@ -52,31 +51,72 @@
             <Button
                 android:id="@+id/hardBtn"
                 android:layout_below="@id/normalBtn"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_width="180dp"
+                android:layout_width="160dp"
                 android:layout_height="80dp"
+                android:layout_marginRight="10dp"
                 android:textSize="15sp"
                 android:onClick="PlayHard"
                 android:text="@string/start_hard_game"/>
 
-            <CheckBox
-                android:id="@+id/checkBox_blacks"
-                android:layout_below="@id/hardBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:buttonTint="@color/background2"
-                android:checked="true"
-                android:text="Black Pieces" />
+            <RelativeLayout
+                android:layout_width="160dp"
+                android:layout_height="80dp"
+                android:layout_below="@id/normalBtn"
+                android:layout_toRightOf="@id/hardBtn">
 
-            <CheckBox
-                android:id="@+id/checkBox_whites"
-                android:layout_toRightOf="@id/checkBox_blacks"
-                android:layout_below="@id/hardBtn"
+                <TextView
+                    android:id="@+id/tvCustom"
+                    android:text="Custom Depth"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <EditText
+                    android:id="@+id/number"
+                    android:layout_below="@id/tvCustom"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:digits="0123456789"
+                    android:maxLength="1" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="80dp"
+                    android:layout_toRightOf="@id/number"
+                    android:layout_below="@id/tvCustom"
+                    android:textSize="15sp"
+                    android:onClick="PlayCustom"
+                    android:text="Play!"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toEndOf="@id/number" />
+
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/background2"
-                android:text="White Pieces" />
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/hardBtn">
+                <CheckBox
+                    android:id="@+id/checkBox_blacks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/background2"
+                    android:checked="true"
+                    android:text="Black Pieces" />
+
+                <CheckBox
+                    android:id="@+id/checkBox_whites"
+                    android:layout_toRightOf="@id/checkBox_blacks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/background2"
+                    android:text="White Pieces" />
+            </RelativeLayout>
+
+
 
         </RelativeLayout>
 

@@ -29,87 +29,56 @@ public class CheckersIA {
             case 2:
                 piece = hardIA(this.depth);
                 break;
+            case 3:
+                piece = customIA(this.depth);
+                break;
         }
 
         return piece;
     }
 
-    public LinkedList<Piece> getValidPieces(CheckersMap map, Boolean IA) {
-        LinkedList<Piece> validPieces = new LinkedList<Piece>();
-        if (IA) {
-            LinkedList<Piece> iaPieces = map.getIaPieces();
-
-            for (Piece piece : iaPieces) {
-                int hasMoves = piece.checkValidMoves(map.getMap());
-
-                if (hasMoves > 0) {
-                    validPieces.add(piece);
-                }
-            }
-        } else {
-            LinkedList<Piece> playerPieces = map.getPlayerPieces();
-
-            for (Piece piece : playerPieces) {
-                int hasMoves = piece.checkValidMoves(map.getMap());
-
-                if (hasMoves > 0) {
-                    validPieces.add(piece);
-                }
-            }
-        }
-
-        return validPieces;
-    }
-
     private Piece easyIA() {
-        /*
         LinkedList<Piece> validPieces = getValidPieces(checkersMap, true);
-        Piece p = selectRandomPiece(validPieces);
-        */
-        LinkedList<Piece> validPieces = getValidPieces(checkersMap, true);
-        Piece p = null;
 
         for (Piece piece: validPieces) {
-            if (piece.canEat()) p = piece;
+            if (piece.canEat()) {
+                return piece;
+            }
         }
 
-        if (p == null) {
-            p = selectRandomPiece(validPieces);
-        }
-
-        return p;
+        return selectRandomPiece(validPieces);
     }
 
     private Piece mediumIA(int depth) {
-        /*
-        LinkedList<Piece> validPieces = getValidPieces(checkersMap, true);
-        Piece p = null;
+        long init = System.currentTimeMillis();
+        Piece selected = minimax(depth, checkersMap);
+        init = System.currentTimeMillis()-init;
+        System.out.println("[IA] Finished minmax with depth: " + depth + ". Time: " + (init) + "ms");
 
-        for (Piece piece: validPieces) {
-            if (piece.canEat()) p = piece;
-        }
-
-        if (p == null) {
-            p = selectRandomPiece(validPieces);
-        }
-        */
-
-        Piece p = minimax(depth, checkersMap, CheckersIA.IA);
-
-        return p;
+        return selected;
     }
 
     private Piece hardIA(int depth) {
-        Piece p = minimax(depth, checkersMap, CheckersIA.IA);
+        long init = System.currentTimeMillis();
+        Piece selected = minimax(depth, checkersMap);
+        init = System.currentTimeMillis()-init;
+        System.out.println("[IA] Finished minmax with depth: " + depth + ". Time: " + (init) + "ms");
 
-        return p;
+        return selected;
     }
 
-    private  Piece minimax(int depth, CheckersMap checkersMap, boolean IA) {
+    private Piece customIA(int depth) {
+        long init = System.currentTimeMillis();
+        Piece selected = minimax(depth, checkersMap);
+        init = System.currentTimeMillis()-init;
+        System.out.println("[IA] Finished minmax with depth: " + depth + ". Time: " + (init) + "ms");
+
+        return selected;
+    }
+
+    private  Piece minimax(int depth, CheckersMap checkersMap) {
+        LinkedList<Piece> pieces;
         Piece bestPiece = null;
-        Movement bestMovement = null;
-        // Get the valid pieces for the IA on the map passed by parameters
-        LinkedList<Piece> pieces = null;
 
         if (IA) {
             pieces = checkersMap.getIaPieces();
@@ -123,29 +92,24 @@ public class CheckersIA {
 
             for (Movement movement: piece.getValidMoves()) {
                 if (hasMoves == 2 && !movement.isEatMovement()) continue;
-                // Create copy objects of everything we will use
+                // Create copy object of the CheckersMap. Not need copy of pieces or movements
                 CheckersMap testMap = new CheckersMap(checkersMap);
 
-                // We don't need the scores to move the piece
                 piece.setMovement(movement);
-                // The CheckersMap will move the real piece of the map by ID.
-                // The Object piece and his movement will stay as now (dont need copy)
                 testMap.movePiece(piece);
-
-                // Now we tested the movement, lets set the score of it
                 movement.setScore(calculateMovementScore(piece, testMap));
 
                 // Now we look for the best player response, his best movement
-                Piece bestPlayerResponse = getBestPlayerResponse(testMap);
+                Piece bestResponse = getBestPlayerResponse(testMap);
 
                 // If the player has a valid movement get the score and update our movement score
-                if (bestPlayerResponse != null) {
-                    movement.setScore(movement.getScore() - bestPlayerResponse.getMovement().getScore());
-                    testMap.movePiece(bestPlayerResponse);
+                if (bestResponse != null) {
+                    movement.setScore(movement.getScore() - bestResponse.getMovement().getScore());
+                    testMap.movePiece(bestResponse);
 
                     // Per each movement if depth > 1 we have to repeat the entire process for that map state
                     if (depth > 1) {
-                        Piece depthPiece = minimax(depth-1, testMap, CheckersIA.IA);
+                        Piece depthPiece = minimax(depth-1, testMap);
 
                         // If on that sub-state we have some valid movement we add the score of it to our movement score
                         if (depthPiece != null) {
@@ -155,7 +119,6 @@ public class CheckersIA {
                             movement.setScore(movement.getScore() - 100*depth);
                         }
                     }
-
                 } else {
                     // If the player cannot do anything and we eat all his pieces we win
                     // 100 points for that winning movement * depth
@@ -168,31 +131,19 @@ public class CheckersIA {
                     }
                 }
 
-                if (movement.getScore() > 200){
+                if (bestPiece == null || bestPiece.getMovement().getScore() < movement.getScore()) {
                     bestPiece = piece;
                     bestPiece.setMovement(movement);
-
-                    return bestPiece;
-                }
-
-                if (bestMovement == null || bestMovement.getScore() < movement.getScore()) {
-                    bestMovement = movement;
-                    bestPiece = piece;
                 }
             }
-        }
-
-        if (bestPiece != null) {
-            bestPiece.setMovement(bestMovement);
         }
 
         return bestPiece;
     }
 
     private Piece getBestPlayerResponse(CheckersMap copyMap) {
-        Piece bestPlayerPiece = null;
-        Movement bestPlayerMovement = null;
         LinkedList<Piece> playerPieces = copyMap.getPlayerPieces();
+        Piece bestPlayerPiece = null;
 
         for (Piece piece : playerPieces) {
             int hasMoves = piece.checkValidMoves(copyMap.getMap());
@@ -204,38 +155,14 @@ public class CheckersIA {
                 tmpMap.movePiece(piece);
                 movement.setScore(calculateMovementScore(piece, tmpMap));
 
-                if (bestPlayerMovement == null || bestPlayerMovement.getScore() < movement.getScore()) {
-                    bestPlayerMovement = movement;
+                if (bestPlayerPiece == null || bestPlayerPiece.getMovement().getScore() < movement.getScore()) {
                     bestPlayerPiece = piece;
+                    bestPlayerPiece.setMovement(movement);
                 }
             }
         }
 
-        if (bestPlayerMovement != null) {
-            bestPlayerPiece.setMovement(bestPlayerMovement);
-        }
-
         return bestPlayerPiece;
-    }
-
-
-    private Piece selectRandomPiece(LinkedList<Piece> validPieces) {
-        Piece selected = null;
-
-        if (validPieces.size() > 0) {
-            Random rand = new Random();
-            int upperbound = validPieces.size();
-            int random = rand.nextInt(upperbound);
-
-            selected = validPieces.get(random);
-            Collections.sort(selected.getValidMoves());
-
-            upperbound = selected.getValidMoves().size();
-            random = rand.nextInt(upperbound);
-            selected.setMovement(selected.getValidMoves().get(random));
-        }
-
-        return selected;
     }
 
     /* Needs to be called after moved the piece */
@@ -248,7 +175,7 @@ public class CheckersIA {
             // Si la pieza no esta segura -10 puntos
             score -= 10;
             if (piece.isKing()) {
-                score -= 10;
+                score -= 20;
             }
         } else {
             // Si la pieza esta segura +5 puntos
@@ -296,22 +223,22 @@ public class CheckersIA {
             }
         }
 
+        //System.out.println("[IA] Returned score: " + score);
         return score;
     }
 
     private boolean isEatable(Piece piece, CheckersMap map) {
         if(piece == null) return false;
-
-        LinkedList<Piece> pieces = null;
+        LinkedList<Piece> pieces;
 
         if (piece.getType() == 2) {
             pieces = map.getPlayerPieces();
         } else {
             pieces = map.getIaPieces();
         }
+
         for (Piece p: pieces) {
-            int hasMoves = piece.checkValidMoves(map.getMap());
-            if (hasMoves != 2) continue;
+            if (piece.checkValidMoves(map.getMap()) != 2) continue;
             for (Movement m: p.getValidMoves()) {
                 if (!m.isEatMovement()) continue;
                 if (m.isEatMovement()) {
@@ -324,4 +251,46 @@ public class CheckersIA {
 
         return false;
     }
+
+    public LinkedList<Piece> getValidPieces(CheckersMap map, Boolean IA) {
+        LinkedList<Piece> validPieces = new LinkedList<Piece>();
+        LinkedList<Piece> pieces;
+
+        if (IA) {
+            pieces = map.getIaPieces();
+
+        } else {
+            pieces =  map.getPlayerPieces();
+        }
+
+        for (Piece piece : pieces) {
+            int hasMoves = piece.checkValidMoves(map.getMap());
+
+            if (hasMoves > 0) {
+                validPieces.add(piece);
+            }
+        }
+
+        return validPieces;
+    }
+
+    private Piece selectRandomPiece(LinkedList<Piece> validPieces) {
+        Piece selected = null;
+
+        if (validPieces.size() > 0) {
+            Random rand = new Random();
+            int upperbound = validPieces.size();
+            int random = rand.nextInt(upperbound);
+
+            selected = validPieces.get(random);
+            Collections.sort(selected.getValidMoves());
+
+            upperbound = selected.getValidMoves().size();
+            random = rand.nextInt(upperbound);
+            selected.setMovement(selected.getValidMoves().get(random));
+        }
+
+        return selected;
+    }
+
 }

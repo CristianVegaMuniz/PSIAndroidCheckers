@@ -69,7 +69,15 @@ public class GameActivity extends AppCompatActivity {
         setClickListeners();
 
         if (level == 2) depth = 5;
+        if (level == 3) depth = getIntent().getIntExtra("DEPTH", 1);
+
         System.out.println("[IA] The level selected is: " + level + " with depth: " + depth);
+        TextView tvLevel = (TextView) findViewById(R.id.tvLevel);
+        if (level > 0) {
+            tvLevel.setText("Level: " + level + "\nDepth: " + depth);
+        } else {
+            tvLevel.setText("Level: " + level);
+        }
         ia = new CheckersIA(checkersMap, level, depth);
 
         if (!playerWhites) {

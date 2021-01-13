@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.view.View;
 import android.os.Bundle;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.NumberPicker;
 
 public class MainActivity extends AppCompatActivity {
     private int easy = 0;
     private int normal = 1;
     private int hard = 2;
+    private int custom = 3;
     private CheckBox cbBlacks, cbWhites;
 
     @Override
@@ -69,4 +72,18 @@ public class MainActivity extends AppCompatActivity {
         }
         startActivity(playActivity);
     }
+
+    public void PlayCustom(View view){
+        Intent playActivity = new Intent(this, GameActivity.class);
+        EditText edittext = (EditText) findViewById(R.id.number);
+        int depth = Integer.parseInt(edittext.getText().toString());
+
+        playActivity.putExtra("LEVEL", custom);
+        playActivity.putExtra("DEPTH", depth);
+        if (cbWhites.isChecked()) {
+            playActivity.putExtra("WHITES", true);
+        }
+        startActivity(playActivity);
+    }
+
 }
