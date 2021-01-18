@@ -1,6 +1,5 @@
 package com.example.checkers;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,6 +10,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import android.media.MediaPlayer;
 
 import java.util.LinkedList;
 
@@ -48,11 +49,16 @@ public class GameActivity extends AppCompatActivity {
     private boolean waitingForIA = false;
     private ScrollView logScroll;
 
+    MediaPlayer mp, mp1;
+    int lastSong = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         level = getIntent().getIntExtra("LEVEL", 0);
         playerWhites = getIntent().getBooleanExtra("WHITES", false);
+        nextSong();
+
 
         if (playerWhites) {
             setContentView(R.layout.activity_game_whites);
@@ -85,12 +91,64 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    public void nextSong(){
+
+        int  i = 0;
+        if(lastSong != 3)
+        i = (int) Math.round(Math.random() * 2);
+        else if(lastSong == 0)
+            i = (int) Math.round(Math.random() + 1);
+        else if(lastSong == 1)
+            i = (int) Math.round(Math.random()) * 2;
+        else if(lastSong == 2)
+            i = (int) Math.round(Math.random());
+
+        if (i == 0){
+            mp = MediaPlayer.create(this, R.raw.flower);
+            mp.start();
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    mp.release();
+                    nextSong();
+                };
+            });}
+        else if (i == 1){
+            mp = MediaPlayer.create(this, R.raw.boss);
+            mp.start();
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    mp.release();
+                    nextSong();
+                };
+            });}
+        else {
+            mp = MediaPlayer.create(this, R.raw.athletic);
+            mp.start();
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    mp.release();
+                    nextSong();
+                };
+            });}
+    }
+
     public void handlerIA(Piece iaPiece) {
         if (iaPiece != null) {
             System.out.println("[IA] Selected the movement: " + iaPiece.getMovement().toString());
             String logMsg = checkersMap.getLogMsg() + "\n  -> IA selected the movement: " + iaPiece.getMovement().toString();
             checkersMap.setLogMsg(logMsg);
             logs.setText(logMsg);
+
+            if(iaPiece.getMovement().isEatMovement()){
+                mp1 = MediaPlayer.create(this, R.raw.ow);
+                mp1.start();
+                mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+
+                    };
+                });
+            }
 
             deletePiece(iaPiece.getX(), iaPiece.getY());
             checkersMap.movePiece(iaPiece, imageViews, scoreIa, scorePlayer);
@@ -202,12 +260,18 @@ public class GameActivity extends AppCompatActivity {
             LinkedList<Piece> plValidPîeces = ia.getValidPieces(checkersMap, false);
             if (checkersMap.getPlayerPieces().isEmpty() || plValidPîeces.isEmpty()) {
                 msg = "IA Wins!\nDo you want to play again?";
+                mp.stop();
+                mp1 = MediaPlayer.create(this, R.raw.gameover);
+                mp1.start();
                 finish = true;
             }
         } else {
             LinkedList<Piece> iaValidPîeces = ia.getValidPieces(checkersMap, true);
             if (checkersMap.getIaPieces().isEmpty() || iaValidPîeces.isEmpty()) {
                 msg = "You Win!\nDo you want to play again?";
+                mp.stop();
+                mp1 = MediaPlayer.create(this, R.raw.score);
+                mp1.start();
                 finish = true;
             }
         }
@@ -242,6 +306,14 @@ public class GameActivity extends AppCompatActivity {
         if (player.getSelectedPiece() == null) {
             player.setSelectedPiece(checkersMap.getPlayerPiece(selX,selY));
             if (player.getSelectedPiece() != null) {
+                MediaPlayer mp1 = MediaPlayer.create(this, R.raw.yoshi);
+                mp1.start();
+                mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+
+                    };
+                });
                 cell.setBackgroundColor(green);
                 drawValidMoves(player.getSelectedPiece());
             }
@@ -254,10 +326,34 @@ public class GameActivity extends AppCompatActivity {
             imageViews[x][y].setBackgroundColor(background_blacks);
             selected.move(selX,selY);
 
+
             boolean moved = checkersMap.movePiece(selected, imageViews, scoreIa, scorePlayer);
             removeValidMoves(selected);
 
+            if(selected.getMovement().isEatMovement()){
+                mp1 = MediaPlayer.create(this, R.raw.tongue);
+                mp1.start();
+                mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+
+                    };
+                });
+            }
+            else{
+                mp1 = MediaPlayer.create(this, R.raw.pingha);
+                mp1.start();
+                mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+
+                    };
+                });
+
+            }
+
             if (moved) {
+
                 selected.getMovement().setScore(ia.calculateMovementScore(selected, checkersMap));
                 String msg = checkersMap.getLogMsg() + "\n  -> PL selected the movement: " + selected.getMovement().getStartX() + "-"
                         + selected.getMovement().getStartY() + " To: " + selected.getMovement().getGoX() + "-" + selected.getMovement().getGoY();
@@ -267,6 +363,18 @@ public class GameActivity extends AppCompatActivity {
 
                 deletePiece(x,y);
                 drawPiece(selected);
+
+                if(selected.isKing()){
+                    mp1 = MediaPlayer.create(this, R.raw.wooh);
+                    mp1.start();
+                    mp1.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        public void onCompletion(MediaPlayer mp) {
+                            mp.release();
+
+                        };
+                    });
+                }
+
                 checkEndGame(false);
 
                 callIA();

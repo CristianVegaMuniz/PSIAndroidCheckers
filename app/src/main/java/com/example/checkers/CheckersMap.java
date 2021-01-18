@@ -103,6 +103,7 @@ public class CheckersMap {
                 }
 
         if (eater.getType() == 1) {
+
             iaPieces.remove(eaten);
         } else {
             playerPieces.remove(eaten);

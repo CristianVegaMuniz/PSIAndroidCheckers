@@ -3,6 +3,7 @@ package com.example.checkers;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.view.View;
 import android.os.Bundle;
 import android.widget.CheckBox;
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private int hard = 2;
     private int custom = 3;
     private CheckBox cbBlacks, cbWhites;
+    MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         cbBlacks = (CheckBox) findViewById(R.id.checkBox_blacks);
         cbWhites = (CheckBox) findViewById(R.id.checkBox_whites);
+
+        mp = MediaPlayer.create(this, R.raw.overworld);
+        mp.start();
+        mp.setLooping(true);
 
         cbBlacks.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
             playActivity.putExtra("WHITES", true);
         }
         startActivity(playActivity);
+        mp.stop();
+        mp.release();
     }
 
     public void PlayNormal(View view){
@@ -61,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         if (cbWhites.isChecked()) {
             playActivity.putExtra("WHITES", true);
         }
+        mp.stop();
+        mp.release();
         startActivity(playActivity);
     }
 
@@ -70,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
         if (cbWhites.isChecked()) {
             playActivity.putExtra("WHITES", true);
         }
+        mp.stop();
+        mp.release();
         startActivity(playActivity);
     }
 
@@ -84,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
             if (cbWhites.isChecked()) {
                 playActivity.putExtra("WHITES", true);
             }
+            mp.stop();
+            mp.release();
             startActivity(playActivity);
         } catch (Exception e) {
         }
