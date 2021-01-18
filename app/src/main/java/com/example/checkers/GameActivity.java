@@ -68,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
         init();
         setClickListeners();
 
-        if (level == 2) depth = 5;
+        if (level == 2) depth = 4;
         if (level == 3) depth = getIntent().getIntExtra("DEPTH", 1);
 
         System.out.println("[IA] The level selected is: " + level + " with depth: " + depth);
