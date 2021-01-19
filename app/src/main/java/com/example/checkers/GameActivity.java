@@ -86,15 +86,61 @@ public class GameActivity extends AppCompatActivity {
         }
         ia = new CheckersIA(checkersMap, level, depth);
 
-        if (!playerWhites) {
-            callIA();
+        int rand = (int) Math.round(Math.random());
+        Context context = this;
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+        if(rand == 1) {
+            builder1.setMessage("AI Starts!");
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                    callIA();
+                }
+            });
+        }else{
+            builder1.setMessage("Player starts!");
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            });
         }
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+        /*if (!playerWhites) {
+            callIA();
+        }*/
     }
 
+    @Override
+    public void onResume() {
+        mp.start();
+        super.onResume();
+    }
+    @Override
+    public void onPause() {
+        mp.pause();
+        super.onPause();
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onBackPressed() {
+       super.onBackPressed();
+       finish();
+    }
     public void nextSong(){
 
         int  i = 0;
-        if(lastSong != 3)
+
+        if(lastSong == 3)
         i = (int) Math.round(Math.random() * 2);
         else if(lastSong == 0)
             i = (int) Math.round(Math.random() + 1);
@@ -109,6 +155,7 @@ public class GameActivity extends AppCompatActivity {
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
                     mp.release();
+                    lastSong = 0;
                     nextSong();
                 };
             });}
@@ -118,6 +165,7 @@ public class GameActivity extends AppCompatActivity {
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
                     mp.release();
+                    lastSong = 1;
                     nextSong();
                 };
             });}
@@ -127,6 +175,7 @@ public class GameActivity extends AppCompatActivity {
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
                     mp.release();
+                    lastSong = 2;
                     nextSong();
                 };
             });}

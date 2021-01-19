@@ -51,7 +51,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onResume() {
+        mp.start();
+        super.onResume();
+    }
 
+    public void onPause() {
+        mp.pause();
+        super.onPause();
+    }
     public void PlayEasy(View view){
         Intent playActivity = new Intent(this, GameActivity.class);
         playActivity.putExtra("LEVEL", easy);
@@ -59,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
             playActivity.putExtra("WHITES", true);
         }
         startActivity(playActivity);
-        mp.stop();
-        mp.release();
     }
 
     public void PlayNormal(View view){
@@ -69,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
         if (cbWhites.isChecked()) {
             playActivity.putExtra("WHITES", true);
         }
-        mp.stop();
-        mp.release();
         startActivity(playActivity);
     }
 
@@ -80,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
         if (cbWhites.isChecked()) {
             playActivity.putExtra("WHITES", true);
         }
-        mp.stop();
-        mp.release();
         startActivity(playActivity);
     }
 
@@ -96,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
             if (cbWhites.isChecked()) {
                 playActivity.putExtra("WHITES", true);
             }
-            mp.stop();
-            mp.release();
             startActivity(playActivity);
         } catch (Exception e) {
         }
