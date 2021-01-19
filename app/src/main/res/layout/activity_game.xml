@@ -67,7 +67,7 @@
                     android:src="@drawable/white"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp"
                     tools:ignore="NestedWeights"
                     android:contentDescription="TODO" />
@@ -77,6 +77,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/white_space"
                     android:contentDescription="TODO" />
 
                 <ImageView
@@ -85,13 +86,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_03"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -100,13 +102,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_05"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -115,7 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
@@ -123,6 +126,7 @@
                     android:id="@+id/square_07"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -139,6 +143,7 @@
                     android:id="@+id/square_10"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -147,13 +152,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_12"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -162,13 +168,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_14"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -177,13 +184,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_16"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -192,7 +200,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -211,7 +219,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp"
                     tools:ignore="NestedWeights" />
 
@@ -219,6 +227,7 @@
                     android:id="@+id/square_21"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -227,13 +236,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_23"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -242,13 +252,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_25"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -257,13 +268,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_27"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -281,6 +293,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/white_space_with_nept"
                     tools:ignore="NestedWeights" />
 
                 <ImageView
@@ -288,13 +301,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_32"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -302,13 +316,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_34"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -316,13 +331,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_36"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -330,7 +346,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -348,7 +364,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp"
                     tools:ignore="NestedWeights" />
 
@@ -356,6 +372,7 @@
                     android:id="@+id/square_41"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -363,13 +380,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_43"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -377,13 +395,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_45"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -391,13 +410,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_47"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -415,6 +435,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/white_space_with_nept"
                     tools:ignore="NestedWeights" />
 
                 <ImageView
@@ -423,13 +444,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_52"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -438,13 +460,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_54"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -453,13 +476,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_56"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -468,7 +492,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -487,7 +511,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp"
                     tools:ignore="NestedWeights" />
 
@@ -495,6 +519,7 @@
                     android:id="@+id/square_61"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -503,13 +528,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_63"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -518,13 +544,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_65"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -533,13 +560,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_67"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView
@@ -557,6 +585,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/white_space_with_nept"
                     tools:ignore="NestedWeights" />
 
                 <ImageView
@@ -565,13 +594,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_72"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -580,13 +610,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
                     android:id="@+id/square_74"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space_with_nept"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -595,7 +626,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
 
                 <ImageView
@@ -603,6 +634,7 @@
                     android:id="@+id/square_76"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/white_space"
                     android:layout_weight="1" />
 
                 <ImageView
@@ -613,7 +645,7 @@
                     android:layout_height="match_parent"
 
                     android:layout_weight="1"
-                    android:background="@color/background1"
+                    android:background="@drawable/ground"
                     android:padding="1dp" />
                 <!-- Set image or background here --> />
                 <!-- Repeat the ImageView 7 times and change the id for every ImageView

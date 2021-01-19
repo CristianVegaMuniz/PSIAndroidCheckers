@@ -35,7 +35,7 @@ public class GameActivity extends AppCompatActivity {
     private Drawable whiteKing;
 
     private int green;
-    private int background_blacks;
+    private Drawable background_blacks;
     private int blue;
 
     private final CheckersMap checkersMap = new CheckersMap();
@@ -293,9 +293,9 @@ public class GameActivity extends AppCompatActivity {
         if (piece.getValidMoves() != null) {
             for (Movement move : piece.getValidMoves()) {
                 if (move.isEatMovement()) {
-                    imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackgroundColor(background_blacks);
+                    imageViews[move.getEatedPiece().getX()][move.getEatedPiece().getY()].setBackground(background_blacks);
                 } else {
-                    imageViews[move.getGoX()][move.getGoY()].setBackgroundColor(background_blacks);
+                    imageViews[move.getGoX()][move.getGoY()].setBackground(background_blacks);
                 }
             }
         }
@@ -310,8 +310,8 @@ public class GameActivity extends AppCompatActivity {
             if (checkersMap.getPlayerPieces().isEmpty() || plValidPîeces.isEmpty()) {
                 msg = "IA Wins!\nDo you want to play again?";
                 mp.stop();
-                mp1 = MediaPlayer.create(this, R.raw.gameover);
-                mp1.start();
+                mp = MediaPlayer.create(this, R.raw.gameover);
+                mp.start();
                 finish = true;
             }
         } else {
@@ -319,8 +319,8 @@ public class GameActivity extends AppCompatActivity {
             if (checkersMap.getIaPieces().isEmpty() || iaValidPîeces.isEmpty()) {
                 msg = "You Win!\nDo you want to play again?";
                 mp.stop();
-                mp1 = MediaPlayer.create(this, R.raw.score);
-                mp1.start();
+                mp = MediaPlayer.create(this, R.raw.score);
+                mp.start();
                 finish = true;
             }
         }
@@ -372,7 +372,7 @@ public class GameActivity extends AppCompatActivity {
             int x = selected.getX();
             int y = selected.getY();
 
-            imageViews[x][y].setBackgroundColor(background_blacks);
+            imageViews[x][y].setBackground(background_blacks);
             selected.move(selX,selY);
 
 
@@ -887,7 +887,7 @@ public class GameActivity extends AppCompatActivity {
         iaThinking = findViewById(R.id.ia_think);
 
         green = getResources().getColor(R.color.green);
-        background_blacks = getResources().getColor(R.color.background1);
+        background_blacks = getResources().getDrawable(R.drawable.ground);
         blue = getResources().getColor(R.color.purple_700);
 
         logScroll = findViewById(R.id.scrollLogs);
